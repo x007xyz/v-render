@@ -1,0 +1,274 @@
+.render-form {
+  width: 100%;
+  box-sizing: border-box;
+
+  // 1、标题文字
+  ::v-deep .el-form-item__label {
+    min-height: 36px;
+    line-height: 36px;
+    height: auto;
+    padding-bottom: 0;
+  }
+
+  ::v-deep .el-form-item__content {
+    line-height: 36px;
+
+    .form-input-text {
+      line-height: 36px;
+      //white-space: pre-wrap;
+      word-break: break-word;
+    }
+  }
+
+  ::v-deep .el-form-item {
+    margin-bottom: 32px;
+
+    .el-form-item__label {
+      height: auto;
+    }
+
+    .form-item-box {
+      height: auto;
+    }
+
+    .form-input-text {
+      min-height: 36px;
+      height: auto;
+      line-height: 36px;
+    }
+  }
+
+  ::v-deep .form-item-box {
+    min-height: 36px;
+    line-height: 36px;
+
+    .el-radio-group {
+      vertical-align: top;
+      margin-top: 10px;
+    }
+
+    .el-input__icon {
+      height: 36px;
+      line-height: 36px;
+    }
+  }
+
+  ::v-deep .el-input__inner {
+    vertical-align: top;
+    height: 36px !important;
+    line-height: 36px !important;
+    border: 1px solid #e2e3e6 !important;
+    padding-left: 12px;
+  }
+
+  ::v-deep .el-textarea__inner {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  ::v-deep .el-form-item {
+    margin-bottom: 32px;
+  }
+
+  ::v-deep .el-input.is-active .el-input__inner,
+  ::v-deep .el-input__inner:focus,
+  ::v-deep .el-select .el-input.is-focus .el-input__inner,
+  ::v-deep .el-textarea__inner:focus {
+    border-color: #abb3cc !important;
+  }
+
+  ::v-deep .wti-untext-box {
+    height: 36px !important;
+  }
+
+  .block-title {
+    position: relative;
+    height: 50px;
+    padding-top: 10px;
+    padding-bottom: 24px;
+    font-size: 16px;
+
+    // label 左边的红色竖线
+    .block-line {
+      float: left;
+      width: 4px;
+      height: 16px;
+      background: #ee473a;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .block-text {
+      margin-left: 10px;
+      float: left;
+      height: 16px;
+      font-size: 16px;
+      color: #21273a;
+      font-weight: 600 !important;
+      vertical-align: top;
+      line-height: 16px;
+    }
+
+    .block-fold-btn {
+      float: right;
+      margin-right: 30px;
+      height: 16px;
+      line-height: 16px;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+}
+
+// 带边框的表单组件
+.border-form {
+  .block-item {
+    border: 1px solid #dde0ea;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    background: #fff;
+    padding-bottom: 15px;
+
+    .block-title {
+      height: 60px;
+      line-height: 60px;
+      box-sizing: border-box;
+      background: #f8f9fb;
+      padding: 20px 0 18px 24px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid #dde0ea;
+    }
+
+    .block-title + .block-content {
+      //padding-top: 14px;
+    }
+
+    .block-content {
+      padding: 0 24px;
+    }
+
+    .block-hidden {
+      display: none;
+    }
+  }
+
+  .block-hide {
+    padding-bottom: 0;
+
+    .block-title {
+      border-bottom: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.el-divider {
+  background-color: #f4f5f8;
+}
+
+.scan-type {
+  position: relative;
+  height: 36px;
+  line-height: 36px;
+  margin-bottom: 16px;
+
+  .all-fold-btn {
+    display: inline-block;
+    padding: 0 20px;
+    height: 36px;
+    background: #ee473a;
+    border: 1px solid #ee473a;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
+
+    .all-fold-icon {
+      width: 14px;
+      height: 14px;
+      vertical-align: top;
+      margin-top: 11px;
+    }
+  }
+
+  .block-btn-list {
+    float: left;
+    height: 36px;
+
+    .block-btn {
+      border: 1px solid #dde0ea;
+      height: 36px;
+      line-height: 34px;
+      padding: 0 18px;
+      color: #3a4566;
+      display: inline-block;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .block-btn.focus {
+      background: #ee473a;
+      color: #fff;
+    }
+
+    .block-btn:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    .block-btn:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  .scan-type-btn {
+    display: inline-block;
+    float: right;
+    padding: 0 20px;
+    height: 36px;
+    border: 1px solid #aeb3bf;
+    border-radius: 4px;
+    color: #12182a;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
+    user-select: none;
+
+    .scan-type-icon {
+      width: 14px;
+      height: 14px;
+      vertical-align: top;
+      margin-top: 11px;
+    }
+  }
+}
+
+.render-form ::v-deep input::-webkit-outer-spin-button,
+.render-form ::v-deep input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.render-form ::v-deep input[type="number"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.render-form ::v-deep input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.text-model {
+    position: relative;
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+    color: #12182A;
+}

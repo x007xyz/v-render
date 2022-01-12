@@ -1,0 +1,79 @@
+.child-form-container {
+  width: 100%;
+
+  .child-form {
+    background: #f8f9fb;
+    border-radius: 4px;
+    margin-bottom: 24px;
+
+    .child-form-head {
+      position: relative;
+      height: 44px;
+      line-height: 44px;
+      text-align: left;
+      padding: 0 20px;
+      font-size: 14px;
+      color: #3a4566;
+      border-bottom: 1px solid #e7e8eb;
+      font-weight: 500;
+
+      .cfh-flod,
+      .cfh-unflod {
+        position: absolute;
+        top: 19px;
+        right: 24px;
+        width: 12px;
+        height: 6px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .cfh-del {
+        position: absolute;
+        top: 0;
+        right: 55px;
+        height: 44px;
+        line-height: 44px;
+        cursor: pointer;
+        user-select: none;
+
+        .cfh-del-btn {
+          position: relative;
+          height: 16px;
+          width: 16px;
+          margin-top: 14px;
+          vertical-align: top;
+        }
+
+        .cfh-del-text {
+          display: inline-block;
+          position: relative;
+          height: 44px;
+          line-height: 44px;
+          vertical-align: top;
+          font-size: 14px;
+          color: #949aae;
+          font-weight: 400;
+        }
+      }
+    }
+
+    .child-form-body {
+      padding: 0 20px;
+    }
+  }
+
+  .child-form-add-btn {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    background: #fbfcfd;
+    border: 1px dashed #abb3cc;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+    color: #12182a;
+    cursor: pointer;
+  }
+}
