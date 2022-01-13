@@ -4,6 +4,7 @@
       v-for="option in options"
       :key="option.key"
       :label="option.value"
+      v-bind="getProps(option)"
     >
       {{ option.label }}
     </el-checkbox>
@@ -40,6 +41,11 @@ export default {
     },
   },
   methods: {
+    getProps(data) {
+      //eslint-disable-next-line
+      const { value, label, ...props } = data;
+      return props;
+    },
     onInput(value) {
       this.$emit("input", value);
     },

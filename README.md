@@ -1,24 +1,14 @@
 # v-render
 
-## Project setup
-```
-pnpm install
-```
-
-### Compiles and hot-reloads for development
-```
-pnpm run serve
-```
-
-### Compiles and minifies for production
-```
-pnpm run build
-```
-
-### Lints and fixes files
-```
-pnpm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## TODO
+[X] 基础表单功能封装
+[X] 完成新增/编辑/详情三种不同状态的表单
+[] 表单元素通用属性
+  [] 表单规则校验
+  [] 表单默认值
+[] 表单布局
+[] 数据联动
+  [] 表单数据联动
+  [] 表单状态更新
+[] 基础组件说明
+[] 高级组件说明

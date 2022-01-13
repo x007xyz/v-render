@@ -1,6 +1,11 @@
 <template>
   <el-radio-group v-bind="attrs" v-on="listeners">
-    <el-radio v-for="option in options" :key="option.key" :label="option.value">
+    <el-radio
+      v-for="option in options"
+      :key="option.key"
+      :label="option.value"
+      v-bind="getProps(option)"
+    >
       {{ option.label }}
     </el-radio>
   </el-radio-group>
@@ -36,6 +41,11 @@ export default {
     },
   },
   methods: {
+    getProps(data) {
+      //eslint-disable-next-line
+      const { value, label, ...props } = data;
+      return props;
+    },
     onInput(value) {
       this.$emit("input", value);
     },

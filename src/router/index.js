@@ -13,14 +13,22 @@ const routes = [
   {
     path: "/form/base",
     name: "Base",
-    component: () =>
-      import(/* webpackChunkName: "base" */ "../../examples/form/Base.vue"),
+    component: () => import("../../examples/form/Base.vue"),
   },
   {
     path: "/form/status",
     name: "Status",
-    component: () =>
-      import(/* webpackChunkName: "base" */ "../../examples/form/Status.vue"),
+    component: () => import("../../examples/form/Status.vue"),
+  },
+  {
+    path: "/form/rules",
+    name: "Rules",
+    component: () => import("../../examples/form/Rules.vue"),
+  },
+  {
+    path: "/form/config",
+    name: "Config",
+    component: () => import("../../examples/form/Config.vue"),
   },
 ];
 

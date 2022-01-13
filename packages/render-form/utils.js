@@ -90,6 +90,7 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
       name,
       nextRowFirst,
       currentRowLast,
+      hidden,
       props,
       ...other
     } = fieldOptions;
@@ -103,6 +104,7 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
       name,
       nextRowFirst,
       currentRowLast,
+      hidden,
       label,
     };
   });

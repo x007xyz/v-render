@@ -351,6 +351,10 @@ export default {
     getData() {
       return clonedeep(this.formData);
     },
+    // 校验表单数据
+    validate() {
+      return this.$refs.form.validate();
+    },
   },
   created() {
     this.initFormData();

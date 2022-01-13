@@ -5,6 +5,7 @@
       :key="item.value"
       :label="item.label"
       :value="item.value"
+      v-bind="getProps(item)"
     >
     </el-option>
   </el-select>
@@ -39,6 +40,11 @@ export default {
     },
   },
   methods: {
+    getProps(data) {
+      //eslint-disable-next-line
+      const { value, label, ...props } = data;
+      return props;
+    },
     onInput(value) {
       this.$emit("input", value);
     },
