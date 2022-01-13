@@ -68,13 +68,42 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
       textModel: !!textModel,
       ...field,
     };
+    // 根据组件类型处理数据
+    if (fieldOptions.type === "checkbox") {
+      fieldOptions.defaultValue = [];
+    }
+    if (fieldOptions.type === "switch") {
+      fieldOptions.defaultValue = false;
+    }
     // 使用updateField覆盖fieldOptions，获取最后的值
     if (updateField[fieldOptions.key]) {
       fieldOptions = { ...fieldOptions, ...updateField[fieldOptions.key] };
     }
-    // 将组件的值都放到props中
-    const { defaultValue, type, span, rules, key, label, ...props } =
-      fieldOptions;
-    return { props, defaultValue, type, span, rules, key, label };
+    // 将组件的值都放到_props中
+    const {
+      defaultValue,
+      type,
+      span,
+      rules,
+      key,
+      label,
+      name,
+      nextRowFirst,
+      currentRowLast,
+      props,
+      ...other
+    } = fieldOptions;
+    return {
+      props: { ...other, ...props },
+      defaultValue,
+      type,
+      span,
+      rules,
+      key,
+      name,
+      nextRowFirst,
+      currentRowLast,
+      label,
+    };
   });
 };

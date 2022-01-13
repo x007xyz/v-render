@@ -65,13 +65,20 @@
                     :key="rowItem.key"
                     :style="rowItem.style || {}"
                   >
+                    <div v-if="rowItem.type === 'slot-single'">
+                      <slot :name="rowItem.name"></slot>
+                    </div>
                     <el-form-item
+                      v-else
                       :style="rowItem.style"
                       :class="rowItem.class"
                       :rules="rowItem.rules"
-                      :label="rowItem.label + ':'"
+                      :label="rowItem.label ? rowItem.label + ':' : ''"
                       :prop="rowItem.key"
                     >
+                      <div v-if="rowItem.type === 'slot'">
+                        <slot :name="rowItem.name"></slot>
+                      </div>
                       <ChildForm
                         v-if="rowItem.type === 'form'"
                         v-model.trim="formData[rowItem.key]"
@@ -84,6 +91,48 @@
                         v-bind="rowItem.props"
                       >
                       </NormalInput>
+                      <NumberInput
+                        v-if="rowItem.type === 'number'"
+                        :value="formData[rowItem.key]"
+                        @input="updateValue(rowItem.key, $event)"
+                        v-bind="rowItem.props"
+                      >
+                      </NumberInput>
+                      <NormalSelect
+                        v-if="rowItem.type === 'select'"
+                        :value="formData[rowItem.key]"
+                        @input="updateValue(rowItem.key, $event)"
+                        v-bind="rowItem.props"
+                      >
+                      </NormalSelect>
+                      <RadioGroup
+                        v-if="rowItem.type === 'radio'"
+                        :value="formData[rowItem.key]"
+                        @input="updateValue(rowItem.key, $event)"
+                        v-bind="rowItem.props"
+                      >
+                      </RadioGroup>
+                      <CheckboxGroup
+                        v-if="rowItem.type === 'checkbox'"
+                        :value="formData[rowItem.key]"
+                        @input="updateValue(rowItem.key, $event)"
+                        v-bind="rowItem.props"
+                      >
+                      </CheckboxGroup>
+                      <VSwitch
+                        v-if="rowItem.type === 'switch'"
+                        :value="formData[rowItem.key]"
+                        @input="updateValue(rowItem.key, $event)"
+                        v-bind="rowItem.props"
+                      >
+                      </VSwitch>
+                      <DatePicker
+                        v-if="rowItem.type === 'date'"
+                        :value="formData[rowItem.key]"
+                        @input="updateValue(rowItem.key, $event)"
+                        v-bind="rowItem.props"
+                      >
+                      </DatePicker>
                     </el-form-item>
                   </el-col>
                 </div>
@@ -105,6 +154,12 @@ export default {
   name: "render-form",
   components: {
     NormalInput: () => import("../normal-input"),
+    NumberInput: () => import("../number-input"),
+    NormalSelect: () => import("../normal-select"),
+    RadioGroup: () => import("../radio-group"),
+    CheckboxGroup: () => import("../checkbox-group"),
+    VSwitch: () => import("../switch"),
+    DatePicker: () => import("../date-picker"),
     ChildForm: () => import("../child-form/child-form.vue"),
   },
   props: {
@@ -234,10 +289,12 @@ export default {
         if (fields.children && Array.isArray(fields.children)) {
           fields.children.forEach((field) => {
             // 如果key已经在data中，就取data中的值
-            if (field.key in this.data) {
-              this.$set(this.formData, field.key, this.data[field.key]);
-            } else {
-              this.$set(this.formData, field.key, field.defaultValue);
+            if (field.key) {
+              if (field.key in this.data) {
+                this.$set(this.formData, field.key, this.data[field.key]);
+              } else {
+                this.$set(this.formData, field.key, field.defaultValue);
+              }
             }
           });
         }
@@ -289,6 +346,10 @@ export default {
       } else {
         this.$emit("update:scanType", "normal");
       }
+    },
+    // 获取表单数据
+    getData() {
+      return clonedeep(this.formData);
     },
   },
   created() {

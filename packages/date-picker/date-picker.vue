@@ -1,26 +1,12 @@
 <template>
-  <el-select :value="value" v-bind="attrs" v-on="listeners">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-    >
-    </el-option>
-  </el-select>
+  <el-date-picker v-bind="attrs" v-on="listeners"> </el-date-picker>
 </template>
 <script>
 export default {
-  name: "normal-select",
+  name: "date-picker",
   inheritAttrs: false,
   props: {
-    value: [String, Number],
-    options: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
+    value: [Array, Date, String],
   },
   data() {
     return {};
@@ -29,6 +15,7 @@ export default {
     attrs() {
       return {
         ...this.$attrs,
+        value: this.value,
       };
     },
     listeners() {

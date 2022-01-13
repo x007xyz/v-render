@@ -1,17 +1,13 @@
 <template>
-  <el-select :value="value" v-bind="attrs" v-on="listeners">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-    >
-    </el-option>
-  </el-select>
+  <el-radio-group v-bind="attrs" v-on="listeners">
+    <el-radio v-for="option in options" :key="option.key" :label="option.value">
+      {{ option.label }}
+    </el-radio>
+  </el-radio-group>
 </template>
 <script>
 export default {
-  name: "normal-select",
+  name: "radio-group",
   inheritAttrs: false,
   props: {
     value: [String, Number],
@@ -29,6 +25,7 @@ export default {
     attrs() {
       return {
         ...this.$attrs,
+        value: this.value,
       };
     },
     listeners() {

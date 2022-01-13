@@ -1,15 +1,17 @@
-import NormalInput from './normal-input.vue'
+import NormalInput from "./normal-input.vue";
 export default {
   functional: true,
+  inheritAttrs: false,
   props: {
-    textModel: Boolean
+    textModel: Boolean,
   },
-  render (h, context) {
-    console.log(context)
+  render(h, context) {
     if (context.props.textModel) {
-      return <div className="text-model">{context.data.model.value || '-'}</div>
+      return (
+        <div className="text-model">{context.data.attrs.value || "-"}</div>
+      );
     } else {
-      return h(NormalInput, context.data, context.children)
+      return h(NormalInput, context.data, context.children);
     }
-  }
-}
+  },
+};

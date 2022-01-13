@@ -1,20 +1,20 @@
 <template>
-  <el-select :value="value" v-bind="attrs" v-on="listeners">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
+  <el-checkbox-group v-bind="attrs" v-on="listeners">
+    <el-checkbox
+      v-for="option in options"
+      :key="option.key"
+      :label="option.value"
     >
-    </el-option>
-  </el-select>
+      {{ option.label }}
+    </el-checkbox>
+  </el-checkbox-group>
 </template>
 <script>
 export default {
-  name: "normal-select",
+  name: "checkbox-group",
   inheritAttrs: false,
   props: {
-    value: [String, Number],
+    value: Array,
     options: {
       type: Array,
       default() {
@@ -29,6 +29,7 @@ export default {
     attrs() {
       return {
         ...this.$attrs,
+        value: this.value,
       };
     },
     listeners() {
