@@ -4,7 +4,7 @@ module.exports = {
   title: '你好， VuePress ！',
   description: '这是我的第一个 VuePress 站点',
 
-  plugins: [require('../../demo-container/index')],
+  plugins: ['demo-container'],
 
   // 主题和它的配置
   theme: '@vuepress/theme-default',
