@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <RenderForm :fields="fields" :formItemCol="12">
+    <RenderForm ref="form" :fields="fields">
       <template #submit>
-        <el-button type="primary">提交</el-button>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
       </template>
     </RenderForm>
   </div>
@@ -13,7 +13,7 @@ export default {
     return {
       fields: [
         {
-          label: "典型表单",
+          label: "基础用法",
           children: [
             {
               label: "活动名称",
@@ -106,6 +106,11 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    onSubmit() {
+      this.$alert(JSON.stringify(this.$refs.form.getData(), null, 2));
+    },
   },
 };
 </script>

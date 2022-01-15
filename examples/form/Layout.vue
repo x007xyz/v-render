@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <RenderForm :fields="fields" :formItemCol="12">
+    <el-radio-group v-model="formItemCol">
+      <el-radio-button :label="24">Span24</el-radio-button>
+      <el-radio-button :label="12">Span12</el-radio-button>
+      <el-radio-button :label="6">Span6</el-radio-button>
+    </el-radio-group>
+    <RenderForm :fields="fields" :formItemCol="formItemCol">
       <template #submit>
         <el-button type="primary">提交</el-button>
       </template>
@@ -9,14 +14,12 @@
 </template>
 <script>
 export default {
-  components: {
-    RenderForm: () => import("@v-render/render-form"),
-  },
   data() {
     return {
+      formItemCol: 12,
       fields: [
         {
-          label: "典型表单",
+          label: "表单布局",
           children: [
             {
               label: "活动名称",
@@ -98,6 +101,7 @@ export default {
               props: {
                 type: "textarea",
               },
+              span: 12,
             },
             {
               name: "submit",

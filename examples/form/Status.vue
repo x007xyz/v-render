@@ -5,11 +5,13 @@
         <el-button type="primary" @click="newForm">新增数据</el-button>
       </template>
     </RenderForm>
+    <p>点击新增数据按钮，数据会在编辑表单中显示</p>
     <RenderForm ref="editForm" :fields="fields">
       <template #submit>
         <el-button type="primary" @click="editForm">保存数据</el-button>
       </template>
     </RenderForm>
+    <p>点击保存数据按钮，数据会在表单详情中显示</p>
     <RenderForm ref="detailForm" textModel :fields="fields">
       <template #submit>
         <el-button type="primary">确认数据</el-button>
@@ -19,14 +21,11 @@
 </template>
 <script>
 export default {
-  components: {
-    RenderForm: () => import("@v-render/render-form"),
-  },
   data() {
     return {
       fields: [
         {
-          label: "典型表单",
+          label: "不同状态的表单",
           children: [
             {
               label: "活动名称",

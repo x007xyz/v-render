@@ -9,9 +9,6 @@
 </template>
 <script>
 export default {
-  components: {
-    RenderForm: () => import("@v-render/render-form"),
-  },
   data() {
     return {
       fields: [

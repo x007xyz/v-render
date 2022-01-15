@@ -9,6 +9,7 @@ module.exports = {
   // 主题和它的配置
   theme: '@vuepress/theme-default',
   themeConfig: {
+    displayAllHeaders: true,
     logo: 'https://vuejs.org/images/logo.png',
     nav: [
       {
@@ -27,6 +28,14 @@ module.exports = {
         text: 'v-editor',
         link: '/v-editor/'
       }
-    ]
+    ],
+    sidebar: {
+      '/render-form/': [
+        '',
+        'common',
+        'field',
+        'watcher'
+      ]
+    }
   },
 }
