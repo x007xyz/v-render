@@ -263,7 +263,6 @@ export default {
     },
     // 完整的fields，合并了默认值，全局设置
     allFields() {
-      console.log("allFields");
       return getAllBlocks(
         clonedeep(this.fields),
         this.globalOptions,
@@ -322,6 +321,9 @@ export default {
             this.$set(this.updateField, key, options);
           });
       });
+    },
+    updateFieldProp(key, options) {
+      this.$set(this.updateField, key, options);
     },
     // 更新
     foldBlock(block) {

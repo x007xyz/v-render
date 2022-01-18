@@ -11,6 +11,8 @@
     <router-link to="/form/rules">表单校验</router-link>
     -
     <router-link to="/form/config">配置项</router-link>
+    -
+    <router-link to="/comp/date">日期组件</router-link>
     <router-view></router-view>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="visible">
+  <el-dialog :title="title" :visible.sync="visible" append-to-body>
     <TableData
       ref="table"
       :fetchData="fetchData"
@@ -7,9 +7,8 @@
       :defaultRows="5"
       defaultLayout="total, prev, pager, next"
       @row-click="onChangeChecked"
-    >
-    </TableData>
-    <div style="margin-top:10px;display: flex; justify-content:flex-end;">
+    ></TableData>
+    <div style="margin-top: 10px; display: flex; justify-content: flex-end">
       <el-button @click="cancel">取消</el-button>
       <el-button type="primary" @click="submitForm">确认</el-button>
     </div>
@@ -17,60 +16,62 @@
 </template>
 <script>
 export default {
-  name: 'table-dialog',
+  name: "table-dialog",
   components: {
-    TableData: () => import('../table-data/table-data.vue')
+    TableData: () => import("../table-data/table-data.vue"),
   },
   props: {
     fetchData: [Function, Array],
     columns: Array,
-    title: String
+    title: String,
   },
-  data () {
+  data() {
     return {
       visible: false,
-      selectedList: []
-    }
+      selectedList: [],
+    };
   },
   computed: {
-    tableColumns () {
-      return [{
-        label: '',
-        width: '80px',
-        render: (h, { row }) => {
-          return (
-            <div onClick={event => event.preventDefault()}>
-              <el-checkbox
-                value={this.selectedList.some(({ id }) => id === row.id)}
-              ></el-checkbox>
-            </div>
-          )
-        }
-      }, ...this.columns]
-    }
+    tableColumns() {
+      return [
+        {
+          label: "",
+          width: "80px",
+          render: (h, { row }) => {
+            return (
+              <div onClick={(event) => event.preventDefault()}>
+                <el-checkbox
+                  value={this.selectedList.some(({ id }) => id === row.id)}
+                ></el-checkbox>
+              </div>
+            );
+          },
+        },
+        ...this.columns,
+      ];
+    },
   },
   methods: {
-    submitForm () {
-      this.$emit('onConfirm', this.selectedList)
-      this.visible = false
+    submitForm() {
+      this.$emit("onConfirm", this.selectedList);
+      this.visible = false;
     },
-    onChangeChecked (item) {
-      const index = this.selectedList.findIndex(({ id }) => item.id === id)
+    onChangeChecked(item) {
+      const index = this.selectedList.findIndex(({ id }) => item.id === id);
       if (index > -1) {
-        this.selectedList.splice(index, 1)
+        this.selectedList.splice(index, 1);
       } else {
-        this.selectedList.unshift(item)
+        this.selectedList.unshift(item);
       }
     },
-    show (list = []) {
-      this.selectedList = [...list]
-      this.visible = true
+    show(list = []) {
+      this.selectedList = [...list];
+      this.visible = true;
     },
-    cancel () {
-      this.visible = false
-    }
-  }
-}
+    cancel() {
+      this.visible = false;
+    },
+  },
+};
 </script>
-<style lang="css" scoped>
-</style>
+<style lang="css" scoped></style>

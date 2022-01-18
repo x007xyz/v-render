@@ -70,10 +70,14 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
     };
     // 根据组件类型处理数据
     if (fieldOptions.type === "checkbox") {
-      fieldOptions.defaultValue = [];
+      if (fieldOptions.defaultValue === "") {
+        fieldOptions.defaultValue = [];
+      }
     }
     if (fieldOptions.type === "switch") {
-      fieldOptions.defaultValue = false;
+      if (fieldOptions.defaultValue === "") {
+        fieldOptions.defaultValue = false;
+      }
     }
     // 使用updateField覆盖fieldOptions，获取最后的值
     if (updateField[fieldOptions.key]) {

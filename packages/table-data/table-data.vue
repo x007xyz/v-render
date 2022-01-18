@@ -68,107 +68,113 @@
   </div>
 </template>
 <script>
-import { getColumnAttr } from './utils'
+import { getColumnAttr } from "./utils";
 export default {
-  name: 'table-data',
-  components: { TableItem: () => import('../render-item/render-item.vue') },
+  name: "table-data",
+  components: { TableItem: () => import("../render-item/render-item.vue") },
   props: {
     operationAttr: Object,
     columns: Array,
     operations: Array,
     fetchData: {
       type: [Function, Array],
-      required: true
+      required: true,
     },
     setStyle: Function,
     selection: {
       type: Boolean,
-      default: false
+      default: false,
     },
     filter: {
       type: Object,
-      default () {
-        return {}
-      }
+      default() {
+        return {};
+      },
     },
     defaultRows: {
       type: Number,
-      default: 10
+      default: 10,
     },
     defaultLayout: {
       type: String,
-      default: 'total, sizes, prev, pager, next, jumper'
-    }
+      default: "total, sizes, prev, pager, next, jumper",
+    },
   },
-  data () {
+  data() {
     return {
       list: [],
       total: 0,
       rows: this.defaultRows,
-      sortFields: 'cdate desc',
-      page: 1
-    }
+      sortFields: "cdate desc",
+      page: 1,
+    };
   },
   watch: {
-    fetchData (val) {
+    fetchData(val) {
       // 只有在fetchData为数组时，监听fetchData，然后改变数据
       if (Array.isArray(val)) {
-        this.list = this.fetchData.slice((this.page - 1) * this.rows, this.page * this.rows)
-        this.total = this.fetchData.length
+        this.list = this.fetchData.slice(
+          (this.page - 1) * this.rows,
+          this.page * this.rows
+        );
+        this.total = this.fetchData.length;
       }
-    }
+    },
   },
   computed: {
-    isSlotExpand () {
-      return !!this.$slots.expand || !!this.$scopedSlots.expand
+    isSlotExpand() {
+      return !!this.$slots.expand || !!this.$scopedSlots.expand;
     },
-    isSlotOperations () {
-      return !!this.$slots.operations || !!this.$scopedSlots.operations
-    }
+    isSlotOperations() {
+      return !!this.$slots.operations || !!this.$scopedSlots.operations;
+    },
   },
   methods: {
     getColumnAttr,
-    onSelectionChange (val) {
-      this.$emit('selection-change', val)
+    onSelectionChange(val) {
+      this.$emit("selection-change", val);
     },
-    onExpandChange (row, expand) {
-      this.$emit('expand-change', row, expand)
+    onExpandChange(row, expand) {
+      this.$emit("expand-change", row, expand);
     },
-    sortChange (column) {
-      const map = { descending: 'desc', ascending: 'asc' }
-      this.sortFields = `${column.prop} ${map[column.order]}`
-      this.search()
+    sortChange(column) {
+      const map = { descending: "desc", ascending: "asc" };
+      this.sortFields = `${column.prop} ${map[column.order]}`;
+      this.search();
     },
-    handleSizeChange (rows) {
-      this.rows = rows
-      this.search(1)
+    handleSizeChange(rows) {
+      this.rows = rows;
+      this.search(1);
     },
-    search (page) {
+    search(page) {
       if (page) {
-        this.page = page
+        this.page = page;
       }
       // 判断fetchData的类型
       if (Array.isArray(this.fetchData)) {
-        this.list = this.fetchData.slice((page - 1) * this.rows, page * this.rows)
-        this.total = this.fetchData.length
-        return Promise.resolve({ total: this.total, list: this.list })
+        this.list = this.fetchData.slice(
+          (page - 1) * this.rows,
+          page * this.rows
+        );
+        this.total = this.fetchData.length;
+        return Promise.resolve({ total: this.total, list: this.list });
       }
       return this.fetchData({
         ...this.filter, // 过滤字段
         sortFields: this.sortFields, // 排序
         page: this.page,
-        rows: this.rows
-      }).then(data => {
-        this.list = data.list
-        this.total = data.total
-        return data
-      })
-    }
+        rows: this.rows,
+      }).then((data) => {
+        this.list = data.list;
+        this.total = data.total;
+        return data;
+      });
+    },
   },
-  beforeMount () {
-    this.search(1)
-  }
-}
+  beforeMount() {
+    this.search(1);
+  },
+};
 </script>
 <style lang="css" scoped>
 /* .table-data { */

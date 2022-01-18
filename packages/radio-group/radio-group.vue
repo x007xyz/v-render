@@ -15,7 +15,7 @@ export default {
   name: "radio-group",
   inheritAttrs: false,
   props: {
-    value: [String, Number],
+    value: [String, Number, Boolean],
     options: {
       type: Array,
       default() {

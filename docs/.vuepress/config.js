@@ -34,7 +34,10 @@ module.exports = {
         '',
         'common',
         'field',
-        'watcher'
+        'watcher',
+        'base-comp',
+        'advanced',
+        'customize'
       ]
     }
   },
