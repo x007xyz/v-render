@@ -40,6 +40,11 @@ const routes = [
     name: "Date",
     component: () => import("../../examples/components/Date.vue"),
   },
+  {
+    path: "/comp/dict",
+    name: "Dict",
+    component: () => import("../../examples/components/DictSelect.vue"),
+  },
 ];
 
 const router = new VueRouter({

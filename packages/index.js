@@ -7,6 +7,8 @@ import CheckboxGroup from "./checkbox-group";
 import NormalSwitch from "./normal-switch";
 import DatePicker from "./date-picker";
 
+import DictSelect from "./dict-select";
+
 export default {
   install(Vue) {
     Vue.component("RenderForm", RenderForm);
@@ -43,6 +45,12 @@ export default {
     });
     registerHandler("date", (options) => {
       options.type = "date-picker";
+    });
+
+    Vue.component("dict-select", DictSelect);
+
+    registerHandler("dict", (options) => {
+      options.type = "dict-select";
     });
   },
 };

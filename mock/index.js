@@ -1,5 +1,16 @@
 module.exports = [
   {
+    path: "/api/category",
+    handler: (req, res) => {
+      return res.json([
+        { value: 1, label: "美食" },
+        { value: 2, label: "地推活动" },
+        { value: 3, label: "线下主题活动" },
+        { value: 4, label: "单纯品牌曝光" },
+      ]);
+    },
+  },
+  {
     path: "/api/user",
     handler: (req, res) => {
       return res.json({ username: "admin", sex: 5 });

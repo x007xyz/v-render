@@ -16,6 +16,9 @@ export class Storage {
   }
   getItem(key) {
     const ret = this.storage.getItem(key);
+    if (!ret) {
+      return ret;
+    }
     try {
       const item = JSON.parse(ret);
       // 过期时间不存在或者过期时间存在，并且没有过期
@@ -52,4 +55,21 @@ export const setCache = (key, value, cache) => {
     value,
     cache.expire
   );
+};
+
+export const getDictData = (key, dictFn, cache) => {
+  if (key) {
+    // 先查询缓存是否有数据
+    const data = getCache("dictCache-" + key);
+    if (data) {
+      return Promise.resolve(data);
+    }
+  }
+  return dictFn().then((data) => {
+    // data不为空数组，dictName存在，并且设置了缓存时，对获取的数据进行缓存
+    if (data.length && key && cache) {
+      setCache("dictCache-" + key, data, cache);
+    }
+    return data;
+  });
 };

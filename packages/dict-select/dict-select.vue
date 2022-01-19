@@ -2,7 +2,7 @@
   <NormalSelect :value="value" v-bind="attrs" v-on="listeners"></NormalSelect>
 </template>
 <script>
-import { getCache, setCache } from "./utils.js";
+import { getDictData } from "./utils.js";
 /**
  * dict 必填，可以是一个元素为{ value, label }的数组，或者是一个返回数组的函数
  * dictName : 默认为空，String类型，字典名，用来设置和获取缓存字典数据
@@ -12,7 +12,7 @@ export default {
   name: "dict-select",
   inheritAttrs: false,
   components: {
-    NormalSelect: () => import("../normal-select/normal-select.vue"),
+    NormalSelect: () => import("../normal-select"),
   },
   props: {
     value: [String, Number],
@@ -52,20 +52,8 @@ export default {
     },
   },
   created() {
-    if (this.dictName) {
-      // 先查询缓存是否有数据
-      const data = getCache(this.dictName);
-      if (data) {
-        this.options = data;
-        return;
-      }
-    }
-    this.dict().then((data) => {
+    getDictData(this.dictName, this.dict, this.cache).then((data) => {
       this.options = data;
-      // data不为空数组，dictName存在，并且设置了缓存时，对获取的数据进行缓存
-      if (data.length && this.dictName && this.cache) {
-        setCache(this.dictName, data, this.cache);
-      }
     });
   },
 };

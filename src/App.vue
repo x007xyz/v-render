@@ -13,6 +13,8 @@
     <router-link to="/form/config">配置项</router-link>
     -
     <router-link to="/comp/date">日期组件</router-link>
+    -
+    <router-link to="/comp/dict">字典下拉</router-link>
     <router-view></router-view>
   </div>
 </template>
