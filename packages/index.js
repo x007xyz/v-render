@@ -9,6 +9,7 @@ import DatePicker from "./date-picker";
 
 import DictSelect from "./dict-select";
 import SearchSelect from "./search-select";
+import ChildForm from "./child-form";
 
 export default {
   install(Vue) {
@@ -58,6 +59,16 @@ export default {
 
     registerHandler("search", (options) => {
       options.type = "search-select";
+    });
+
+    Vue.component("child-form", ChildForm);
+
+    registerHandler("form", (options) => {
+      options.type = "child-form";
+      options.span = 24;
+      if (options.defaultValue === "") {
+        options.defaultValue = [];
+      }
     });
   },
 };

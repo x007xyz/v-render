@@ -86,60 +86,6 @@
                         @input="updateValue(rowItem.key, $event)"
                         v-bind="rowItem.props"
                       ></component>
-                      <!-- <ChildForm
-                        v-if="rowItem.type === 'form'"
-                        v-model.trim="formData[rowItem.key]"
-                        v-bind="rowItem.props"
-                      />
-                      <NormalInput
-                        v-if="rowItem.type === 'input'"
-                        :value="formData[rowItem.key]"
-                        @input="updateValue(rowItem.key, $event)"
-                        v-bind="rowItem.props"
-                      >
-                      </NormalInput>
-                      <NumberInput
-                        v-if="rowItem.type === 'number'"
-                        :value="formData[rowItem.key]"
-                        @input="updateValue(rowItem.key, $event)"
-                        v-bind="rowItem.props"
-                      >
-                      </NumberInput>
-                      <NormalSelect
-                        v-if="rowItem.type === 'select'"
-                        :value="formData[rowItem.key]"
-                        @input="updateValue(rowItem.key, $event)"
-                        v-bind="rowItem.props"
-                      >
-                      </NormalSelect>
-                      <RadioGroup
-                        v-if="rowItem.type === 'radio'"
-                        :value="formData[rowItem.key]"
-                        @input="updateValue(rowItem.key, $event)"
-                        v-bind="rowItem.props"
-                      >
-                      </RadioGroup>
-                      <CheckboxGroup
-                        v-if="rowItem.type === 'checkbox'"
-                        :value="formData[rowItem.key]"
-                        @input="updateValue(rowItem.key, $event)"
-                        v-bind="rowItem.props"
-                      >
-                      </CheckboxGroup>
-                      <VSwitch
-                        v-if="rowItem.type === 'switch'"
-                        :value="formData[rowItem.key]"
-                        @input="updateValue(rowItem.key, $event)"
-                        v-bind="rowItem.props"
-                      >
-                      </VSwitch>
-                      <DatePicker
-                        v-if="rowItem.type === 'date'"
-                        :value="formData[rowItem.key]"
-                        @input="updateValue(rowItem.key, $event)"
-                        v-bind="rowItem.props"
-                      >
-                      </DatePicker> -->
                     </el-form-item>
                   </el-col>
                 </div>
@@ -161,16 +107,6 @@ import { getFieldRow, getAllBlocks, fields } from "./utils.js";
 console.log(fields);
 export default {
   name: "render-form",
-  // components: {
-  //   NormalInput: () => import("../normal-input"),
-  //   NumberInput: () => import("../number-input"),
-  //   NormalSelect: () => import("../normal-select"),
-  //   RadioGroup: () => import("../radio-group"),
-  //   CheckboxGroup: () => import("../checkbox-group"),
-  //   VSwitch: () => import("../switch"),
-  //   DatePicker: () => import("../date-picker"),
-  //   ChildForm: () => import("../child-form/child-form.vue"),
-  // },
   props: {
     // watcher 监听数据变化
     // 只在表单修改数据时监听，直接修改formData的值时不触发

@@ -50,6 +50,11 @@ const routes = [
     name: "Search",
     component: () => import("../../examples/components/SearchSelect.vue"),
   },
+  {
+    path: "/comp/form",
+    name: "Form",
+    component: () => import("../../examples/components/ChildForm.vue"),
+  },
 ];
 
 const router = new VueRouter({

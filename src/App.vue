@@ -17,6 +17,8 @@
     <router-link to="/comp/dict">字典下拉</router-link>
     -
     <router-link to="/comp/search">搜索下拉</router-link>
+    -
+    <router-link to="/comp/form">子表单</router-link>
     <router-view></router-view>
   </div>
 </template>
