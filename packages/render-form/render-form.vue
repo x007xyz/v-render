@@ -79,7 +79,13 @@
                       <div v-if="rowItem.type === 'slot'">
                         <slot :name="rowItem.name"></slot>
                       </div>
-                      <ChildForm
+                      <component
+                        :is="rowItem.type"
+                        :value="formData[rowItem.key]"
+                        @input="updateValue(rowItem.key, $event)"
+                        v-bind="rowItem.props"
+                      ></component>
+                      <!-- <ChildForm
                         v-if="rowItem.type === 'form'"
                         v-model.trim="formData[rowItem.key]"
                         v-bind="rowItem.props"
@@ -132,7 +138,7 @@
                         @input="updateValue(rowItem.key, $event)"
                         v-bind="rowItem.props"
                       >
-                      </DatePicker>
+                      </DatePicker> -->
                     </el-form-item>
                   </el-col>
                 </div>
@@ -149,19 +155,21 @@
 
 <script>
 import clonedeep from "lodash.clonedeep";
-import { getFieldRow, getAllBlocks } from "./utils.js";
+import { getFieldRow, getAllBlocks, fields } from "./utils.js";
+
+console.log(fields);
 export default {
   name: "render-form",
-  components: {
-    NormalInput: () => import("../normal-input"),
-    NumberInput: () => import("../number-input"),
-    NormalSelect: () => import("../normal-select"),
-    RadioGroup: () => import("../radio-group"),
-    CheckboxGroup: () => import("../checkbox-group"),
-    VSwitch: () => import("../switch"),
-    DatePicker: () => import("../date-picker"),
-    ChildForm: () => import("../child-form/child-form.vue"),
-  },
+  // components: {
+  //   NormalInput: () => import("../normal-input"),
+  //   NumberInput: () => import("../number-input"),
+  //   NormalSelect: () => import("../normal-select"),
+  //   RadioGroup: () => import("../radio-group"),
+  //   CheckboxGroup: () => import("../checkbox-group"),
+  //   VSwitch: () => import("../switch"),
+  //   DatePicker: () => import("../date-picker"),
+  //   ChildForm: () => import("../child-form/child-form.vue"),
+  // },
   props: {
     // watcher 监听数据变化
     // 只在表单修改数据时监听，直接修改formData的值时不触发

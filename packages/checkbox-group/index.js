@@ -20,3 +20,10 @@ export default {
     }
   },
 };
+
+export const dealOptions = (options) => {
+  if (options.defaultValue === "") {
+    options.defaultValue = [];
+  }
+  return options;
+};

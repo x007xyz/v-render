@@ -1,11 +1,11 @@
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-import RenderForm from '../../packages/render-form'
+import VRender from '../../packages/index.js'
 export default ({
   Vue
 }) => {
   Vue.use(ElementUI, {
     size: "small",
   });
-  Vue.component('RenderForm', RenderForm)
+  Vue.use(VRender)
 }

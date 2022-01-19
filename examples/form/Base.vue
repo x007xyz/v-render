@@ -22,7 +22,7 @@ export default {
             },
             {
               label: "活动区域",
-              type: "select",
+              type: "normal-select",
               key: "region",
               options: [
                 {

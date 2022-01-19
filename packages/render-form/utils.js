@@ -1,3 +1,18 @@
+class HandleField {
+  handler = {};
+  register(key, option) {
+    console.log(this);
+    this.handler[key] = option;
+  }
+  format(key, options) {
+    if (key in this.handler) {
+      this.handler[key](options);
+    }
+  }
+}
+
+export const handleFields = new HandleField();
+
 // 对一个 block 下的要素，进行 el-row 的分行
 export const getFieldRow = (fields) => {
   // 返回值是一个二维数组，每一个数组是el-row的一行
@@ -62,23 +77,14 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
     // 获取完整的参数
     let fieldOptions = {
       defaultValue: "",
-      type: "input",
+      type: "normal-input",
       span: formItemCol,
       disabled: !!allDisabled,
       textModel: !!textModel,
       ...field,
     };
     // 根据组件类型处理数据
-    if (fieldOptions.type === "checkbox") {
-      if (fieldOptions.defaultValue === "") {
-        fieldOptions.defaultValue = [];
-      }
-    }
-    if (fieldOptions.type === "switch") {
-      if (fieldOptions.defaultValue === "") {
-        fieldOptions.defaultValue = false;
-      }
-    }
+    handleFields.format(fieldOptions.type, fieldOptions);
     // 使用updateField覆盖fieldOptions，获取最后的值
     if (updateField[fieldOptions.key]) {
       fieldOptions = { ...fieldOptions, ...updateField[fieldOptions.key] };
