@@ -5,6 +5,10 @@
 <<< @/examples/components/DictSelect.vue
 :::
 ### 搜索下拉框
+搜索下拉框支持通过关键字搜索选项，通过设置`canEmpty`是否允许空值搜索；`searchFn`是查询方法，接收一个参数，用户输入的值，返回一个数组；`getOption`通过数据的值获取完整的数据，在表单编辑和查看状态时，获取完整的数据展示出来。
+:::demo
+<<< @/examples/components/SearchSelect.vue
+:::
 ### 表格选择框
 ### 子表单
 ### slot

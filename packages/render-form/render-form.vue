@@ -81,6 +81,7 @@
                       </div>
                       <component
                         :is="rowItem.type"
+                        :key="rowItem.key"
                         :value="formData[rowItem.key]"
                         @input="updateValue(rowItem.key, $event)"
                         v-bind="rowItem.props"

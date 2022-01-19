@@ -45,6 +45,11 @@ const routes = [
     name: "Dict",
     component: () => import("../../examples/components/DictSelect.vue"),
   },
+  {
+    path: "/comp/search",
+    name: "Search",
+    component: () => import("../../examples/components/SearchSelect.vue"),
+  },
 ];
 
 const router = new VueRouter({

@@ -8,6 +8,7 @@ import NormalSwitch from "./normal-switch";
 import DatePicker from "./date-picker";
 
 import DictSelect from "./dict-select";
+import SearchSelect from "./search-select";
 
 export default {
   install(Vue) {
@@ -51,6 +52,12 @@ export default {
 
     registerHandler("dict", (options) => {
       options.type = "dict-select";
+    });
+
+    Vue.component("search-select", SearchSelect);
+
+    registerHandler("search", (options) => {
+      options.type = "search-select";
     });
   },
 };

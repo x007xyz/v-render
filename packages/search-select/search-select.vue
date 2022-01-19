@@ -1,12 +1,16 @@
 <template>
-  <el-select :value="value" v-bind="attrs" v-on="listeners">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
+  <div>
+    <div class="text-model" v-if="textModel">{{ showValue }}</div>
+    <el-select v-else :value="value" v-bind="attrs" v-on="listeners">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+      </el-option>
+    </el-select>
+  </div>
 </template>
 <script>
 /**
@@ -15,80 +19,93 @@
  * getOption 通过value查询{ value, label }的方法，解决选项在默认值时，显示value的问题
  */
 export default {
-  name: 'search-select',
+  name: "search-select",
   inheritAttrs: false,
   props: {
+    textModel: {
+      type: Boolean,
+      default: false,
+    },
     value: [String, Number],
     canEmpty: {
       type: Boolean,
-      default: false
+      default: false,
     },
     searchFn: {
       type: Function,
-      required: true
+      required: true,
     },
-    getOption: Function
+    getOption: Function,
   },
-  data () {
+  data() {
     return {
       loading: false,
-      options: []
-    }
+      options: [],
+    };
   },
   watch: {
     value: {
-      handler (val) {
+      handler(val) {
         // 监听值变化，如果options没有对应的value，则查询添加到options
-        if (val && !this.options.some(item => item.value === val)) {
-          this.getOption && this.getOption(val).then(data => {
-            this.options = this.options.concat(data)
-          })
+        if (val && !this.options.some((item) => item.value === val)) {
+          this.getOption &&
+            this.getOption(val).then((data) => {
+              this.options = this.options.concat(data);
+            });
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   computed: {
-    attrs () {
+    attrs() {
       return {
         ...this.$attrs,
         filterable: true,
         remote: true,
         loading: this.loading,
-        'remote-method': this.remoteMethod
-      }
+        "remote-method": this.remoteMethod,
+      };
     },
-    listeners () {
+    listeners() {
       return {
         ...this.$listeners,
         input: this.onInput,
-        focus: this.onFocus
+        focus: this.onFocus,
+      };
+    },
+    showValue() {
+      const selItem = this.options.find((item) => item.value === this.value);
+      if (!selItem) {
+        return "-";
       }
-    }
+      return selItem.label;
+    },
   },
   methods: {
-    onInput (value) {
-      this.$emit('input', value)
+    onInput(value) {
+      this.$emit("input", value);
     },
-    onFocus () {
-      if (this.canEmpty && this.value === '') {
+    onFocus() {
+      if (this.canEmpty && this.value === "") {
         // 允许查询条件为空，则在用户focus时，查询
-        this.remoteMethod('')
+        this.remoteMethod("");
       }
     },
-    remoteMethod (query) {
-      query = query.trim()
-      if (this.canEmpty || query !== '') {
-        this.loading = true
-        this.searchFn(query).then(data => {
-          this.options = data
-        }).finally(() => {
-          this.loading = false
-        })
+    remoteMethod(query) {
+      query = query.trim();
+      if (this.canEmpty || query !== "") {
+        this.loading = true;
+        this.searchFn(query)
+          .then((data) => {
+            this.options = data;
+          })
+          .finally(() => {
+            this.loading = false;
+          });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
-<style lang="css" scoped>
-</style>
+<style lang="css" scoped></style>
