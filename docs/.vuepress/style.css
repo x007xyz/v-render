@@ -1,0 +1,6 @@
+.el-table td,th, .el-table .el-table__cell {
+  border: none;
+}
+.el-table table {
+  margin: 0;
+}
