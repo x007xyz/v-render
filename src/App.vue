@@ -22,6 +22,8 @@
     -
     <router-link to="/comp/slot">slot</router-link>
     -
+    <router-link to="/comp/table">表格选择器</router-link>
+    -
     <router-link to="/table/index">表格</router-link>
     <router-view></router-view>
   </div>

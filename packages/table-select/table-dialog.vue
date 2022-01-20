@@ -1,13 +1,15 @@
 <template>
   <el-dialog :title="title" :visible.sync="visible" append-to-body>
-    <TableData
+    <RenderTable
       ref="table"
       :fetchData="fetchData"
       :columns="tableColumns"
+      :searchField="searchField"
+      :searchOption="{ formItemCol: 12 }"
       :defaultRows="5"
       defaultLayout="total, prev, pager, next"
       @row-click="onChangeChecked"
-    ></TableData>
+    ></RenderTable>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
       <el-button @click="cancel">取消</el-button>
       <el-button type="primary" @click="submitForm">确认</el-button>
@@ -18,10 +20,11 @@
 export default {
   name: "table-dialog",
   components: {
-    TableData: () => import("../table-data/table-data.vue"),
+    RenderTable: () => import("../render-table"),
   },
   props: {
     fetchData: [Function, Array],
+    searchField: Array,
     columns: Array,
     title: String,
   },

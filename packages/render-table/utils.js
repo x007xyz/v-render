@@ -35,10 +35,11 @@ const columnAttrs = [
  */
 export const getColumnAttr = (schema) => {
   let attr = {};
+  // 使用key设置prop
+  if (schema.key && !schema.prop) {
+    schema.prop = schema.key;
+  }
   Object.keys(schema).forEach((key) => {
-    if (schema.key) {
-      schema.prop = schema.key;
-    }
     if (columnAttrs.includes(key)) {
       attr[key] = schema[key];
     }
@@ -55,5 +56,6 @@ export const getColumnAttr = (schema) => {
       }
     }
   });
+  console.log("attr", attr);
   return attr;
 };

@@ -1,7 +1,7 @@
 # 表格组件
 
 ## 案例展示
-通过`columns`配置表单单元格展示信息，通过`searchFields`配置查询表单。
+通过`columns`配置表单单元格展示信息，通过`searchField`配置查询表单。
 :::demo
 <<< @/examples/table/index.vue
 :::

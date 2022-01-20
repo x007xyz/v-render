@@ -1,18 +1,37 @@
 <template>
   <div class="table-select-wrapper">
-    <el-button type="text" size="default" @click="openTable">{{title}}</el-button>
-      <TableData
-        ref="table"
-        :fetchData="list"
-        :defaultRows="5"
-        defaultLayout="total, prev, pager, next"
-        :columns="columns"
-      >
-        <template v-slot:operations="{ row }">
-          <el-link type="danger" :underline="false" @click="delItem(row)">移除</el-link>
-        </template>
-      </TableData>
-      <TableDialog ref="dialog" :title="title" :fetchData="fetchData" :columns="columns" @onConfirm="onConfirm"></TableDialog>
+    <el-button
+      v-if="!textModel"
+      type="text"
+      size="default"
+      @click="openTable"
+      >{{ title }}</el-button
+    >
+    <RenderTable
+      ref="table"
+      :fetchData="list"
+      :defaultRows="5"
+      defaultLayout="total, prev, pager, next"
+      :columns="columns"
+    >
+      <template v-slot:operations="{ row }">
+        <el-link
+          v-if="!textModel"
+          type="danger"
+          :underline="false"
+          @click="delItem(row)"
+          >移除</el-link
+        >
+      </template>
+    </RenderTable>
+    <TableDialog
+      ref="dialog"
+      :title="title"
+      :fetchData="fetchData"
+      :columns="columns"
+      :searchField="searchField"
+      @onConfirm="onConfirm"
+    ></TableDialog>
   </div>
 </template>
 <script>
@@ -23,72 +42,85 @@
  * 表格内容 columns
  */
 export default {
-  name: 'table-select',
+  name: "table-select",
   components: {
-    TableData: () => import('../table-data/table-data.vue'),
-    TableDialog: () => import('./table-dialog.vue')
+    RenderTable: () => import("../render-table"),
+    TableDialog: () => import("./table-dialog.vue"),
   },
   props: {
     value: {
-      required: true
+      required: true,
     },
     title: String,
     fetchData: Function,
     getItems: Function,
+    searchField: Array,
     elementType: {
       type: String,
-      default () {
+      default() {
         // object 表示返回值时对象数组，unique表示返回值对象时唯一值数组
-        return 'unique'
-      }
+        return "unique";
+      },
     },
     columns: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
+    textModel: {
+      type: Boolean,
+      default: false,
+    },
   },
   watch: {
-    value (val) {
-      if (this.elementType === 'unique') {
-        this.getItems(val).then(data => {
-          this.list = data
-        })
+    value(val) {
+      if (this.elementType === "unique") {
+        this.getItems(val).then((data) => {
+          this.list = data;
+        });
       } else {
-        this.list = val
+        this.list = val;
       }
-    }
+    },
   },
-  data () {
+  data() {
     return {
-      list: []
-    }
+      list: [],
+    };
   },
   methods: {
-    onConfirm (list) {
-      if (this.elementType === 'unique') {
-        this.$emit('input', list.map(item => {
-          return item.id
-        }))
+    onConfirm(list) {
+      if (this.elementType === "unique") {
+        this.$emit(
+          "input",
+          list.map((item) => {
+            return item.id;
+          })
+        );
       } else {
-        this.$emit('input', list)
+        this.$emit("input", list);
       }
     },
-    openTable () {
-      this.$refs.dialog.show(this.list)
+    openTable() {
+      this.$refs.dialog.show(this.list);
     },
-    delItem (row) {
-      if (this.elementType === 'unique') {
-        this.$emit('input', this.value.filter(item => {
-          return item !== row.id
-        }))
+    delItem(row) {
+      if (this.elementType === "unique") {
+        this.$emit(
+          "input",
+          this.value.filter((item) => {
+            return item !== row.id;
+          })
+        );
       } else {
-        this.$emit('input', this.value.filter(item => {
-          return item.id !== row.id
-        }))
+        this.$emit(
+          "input",
+          this.value.filter((item) => {
+            return item.id !== row.id;
+          })
+        );
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
-<style lang="css" scoped>
-</style>
+<style lang="css" scoped></style>

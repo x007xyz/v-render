@@ -61,6 +61,11 @@ const routes = [
     component: () => import("../../examples/components/SlotComp.vue"),
   },
   {
+    path: "/comp/table",
+    name: "cTable",
+    component: () => import("../../examples/components/Table.vue"),
+  },
+  {
     path: "/table/index",
     name: "Table",
     component: () => import("../../examples/table/index.vue"),

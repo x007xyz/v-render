@@ -1,7 +1,7 @@
 <template>
   <div class="render-form" :class="{ 'border-form': borderForm }">
-    <div class="scan-type">
-      <div class="block-btn-list" v-if="scanType === 'single'">
+    <div class="scan-type" v-if="scanType === 'single'">
+      <div class="block-btn-list">
         <template v-for="block in curFields">
           <div
             class="block-btn"

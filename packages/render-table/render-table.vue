@@ -1,21 +1,14 @@
 <template>
   <div class="render-table">
-    <div class="searchbar">
-      <RenderForm
-        :fields="fields"
-        :borderForm="false"
-        ref="search"
-        labelPosition="left"
-        labelWidth="80px"
-        formItemCol="8"
-      >
+    <div class="searchbar" v-if="fields">
+      <RenderForm :fields="fields" v-bind="options" ref="search">
         <template #submit>
           <el-button type="primary" @click="onClickSearch">搜索</el-button>
           <el-button @click="onClickReset">重置</el-button>
         </template>
       </RenderForm>
     </div>
-    <div class="table-toolbar">
+    <div class="table-toolbar" v-if="visibleToolbar">
       <div class="tabs"></div>
       <div class="toolbar">
         <el-tooltip effect="dark" content="搜索">
@@ -99,12 +92,22 @@ export default {
     TableItem: () => import("../render-item/render-item.vue"),
   },
   props: {
+    searchOption: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
     // 搜索表单配置
     searchField: {
       type: Array,
       default() {
         return [];
       },
+    },
+    visibleToolbar: {
+      type: Boolean,
+      default: false,
     },
     operationAttr: Object,
     columns: Array,
@@ -151,8 +154,21 @@ export default {
     },
   },
   computed: {
+    // 搜索表单配置
+    options() {
+      return {
+        borderForm: false,
+        labelPosition: "left",
+        labelWidth: "80px",
+        formItemCol: 8,
+        ...this.searchOption,
+      };
+    },
     // 完整的搜索表单字段
     fields() {
+      if (!this.searchField || this.searchField.length === 0) {
+        return null;
+      }
       return [
         {
           label: "",
@@ -161,7 +177,6 @@ export default {
             {
               name: "submit",
               type: "slot",
-              span: 8,
             },
           ],
         },

@@ -12,7 +12,7 @@ import DatePicker from "./date-picker";
 import DictSelect from "./dict-select";
 import SearchSelect from "./search-select";
 import ChildForm from "./child-form";
-
+import TableSelect from "./table-select";
 export default {
   install(Vue) {
     Vue.component("RenderForm", RenderForm);
@@ -78,6 +78,16 @@ export default {
 
     registerHandler("slot-single", (options) => {
       options.span = 24;
+    });
+
+    Vue.component("table-select", TableSelect);
+
+    registerHandler("table", (options) => {
+      options.type = "table-select";
+      options.span = 24;
+      if (options.defaultValue === "") {
+        options.defaultValue = [];
+      }
     });
   },
 };
