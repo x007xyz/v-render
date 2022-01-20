@@ -70,5 +70,9 @@ export default {
         options.defaultValue = [];
       }
     });
+
+    registerHandler("slot-single", (options) => {
+      options.span = 24;
+    });
   },
 };

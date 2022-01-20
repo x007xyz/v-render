@@ -55,6 +55,11 @@ const routes = [
     name: "Form",
     component: () => import("../../examples/components/ChildForm.vue"),
   },
+  {
+    path: "/comp/slot",
+    name: "Slot",
+    component: () => import("../../examples/components/SlotComp.vue"),
+  },
 ];
 
 const router = new VueRouter({

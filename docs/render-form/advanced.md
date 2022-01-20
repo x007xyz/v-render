@@ -17,3 +17,7 @@
 <<< @/examples/components/ChildForm.vue
 :::
 ## slot
+支持`slot`和`slot-single`两种类型的slot，`slot`是在`form-item`中插入内容，`slot-single`是使用内容替代`form-item`，所以`slot-single`中`label`是无效的，会占据更多的位置。
+:::demo
+<<< @/examples/components/SlotComp.vue
+:::

@@ -73,13 +73,14 @@
                       :style="rowItem.style"
                       :class="rowItem.class"
                       :rules="rowItem.rules"
-                      :label="rowItem.label ? rowItem.label + ':' : ''"
+                      :label="rowItem.label ? rowItem.label + ':' : ' '"
                       :prop="rowItem.key"
                     >
                       <div v-if="rowItem.type === 'slot'">
                         <slot :name="rowItem.name"></slot>
                       </div>
                       <component
+                        v-else
                         :is="rowItem.type"
                         :key="rowItem.key"
                         :value="formData[rowItem.key]"
@@ -102,9 +103,8 @@
 
 <script>
 import clonedeep from "lodash.clonedeep";
-import { getFieldRow, getAllBlocks, fields } from "./utils.js";
+import { getFieldRow, getAllBlocks } from "./utils.js";
 
-console.log(fields);
 export default {
   name: "render-form",
   props: {
