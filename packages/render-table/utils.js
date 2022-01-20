@@ -36,6 +36,9 @@ const columnAttrs = [
 export const getColumnAttr = (schema) => {
   let attr = {};
   Object.keys(schema).forEach((key) => {
+    if (schema.key) {
+      schema.prop = schema.key;
+    }
     if (columnAttrs.includes(key)) {
       attr[key] = schema[key];
     }
@@ -46,7 +49,7 @@ export const getColumnAttr = (schema) => {
       if (typeof schema[key] === "string") {
         const prop = schema.prop;
         const fnName = schema[key];
-        attr[key] = (row) => formatters[fnName](row[prop]);
+        attr[key] = (row) => formatters[fnName](row[prop], row);
       } else {
         attr[key] = schema[key];
       }

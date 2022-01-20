@@ -21,6 +21,8 @@
     <router-link to="/comp/form">子表单</router-link>
     -
     <router-link to="/comp/slot">slot</router-link>
+    -
+    <router-link to="/table/index">表格</router-link>
     <router-view></router-view>
   </div>
 </template>

@@ -1,5 +1,28 @@
 <template>
-  <div class="table-data">
+  <div class="render-table">
+    <div class="searchbar">
+      <RenderForm
+        :fields="fields"
+        :borderForm="false"
+        ref="search"
+        labelPosition="left"
+        labelWidth="80px"
+        formItemCol="8"
+      >
+        <template #submit>
+          <el-button type="primary" @click="onClickSearch">搜索</el-button>
+          <el-button @click="onClickReset">重置</el-button>
+        </template>
+      </RenderForm>
+    </div>
+    <div class="table-toolbar">
+      <div class="tabs"></div>
+      <div class="toolbar">
+        <el-tooltip effect="dark" content="搜索">
+          <i class="el-icon el-icon-refresh-right" @click="search(page)"></i>
+        </el-tooltip>
+      </div>
+    </div>
     <el-table
       ref="table"
       :data="list"
@@ -70,9 +93,19 @@
 <script>
 import { getColumnAttr } from "./utils";
 export default {
-  name: "table-data",
-  components: { TableItem: () => import("../render-item/render-item.vue") },
+  name: "render-table",
+  components: {
+    RenderForm: () => import("../render-form"),
+    TableItem: () => import("../render-item/render-item.vue"),
+  },
   props: {
+    // 搜索表单配置
+    searchField: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
     operationAttr: Object,
     columns: Array,
     operations: Array,
@@ -84,12 +117,6 @@ export default {
     selection: {
       type: Boolean,
       default: false,
-    },
-    filter: {
-      type: Object,
-      default() {
-        return {};
-      },
     },
     defaultRows: {
       type: Number,
@@ -107,6 +134,8 @@ export default {
       rows: this.defaultRows,
       sortFields: "cdate desc",
       page: 1,
+      // 查询条件
+      filter: {},
     };
   },
   watch: {
@@ -122,6 +151,22 @@ export default {
     },
   },
   computed: {
+    // 完整的搜索表单字段
+    fields() {
+      return [
+        {
+          label: "",
+          children: [
+            ...this.searchField,
+            {
+              name: "submit",
+              type: "slot",
+              span: 8,
+            },
+          ],
+        },
+      ];
+    },
     isSlotExpand() {
       return !!this.$slots.expand || !!this.$scopedSlots.expand;
     },
@@ -130,6 +175,18 @@ export default {
     },
   },
   methods: {
+    updateFilterProp(key, value) {
+      this.filter[key] = value;
+    },
+    onClickReset() {
+      this.$refs.search.initFormData();
+      this.filter = { ...this.filter, ...this.$refs.search.getData() };
+      this.search(1);
+    },
+    onClickSearch() {
+      this.filter = { ...this.filter, ...this.$refs.search.getData() };
+      this.search(1);
+    },
     getColumnAttr,
     onSelectionChange(val) {
       this.$emit("selection-change", val);
@@ -177,10 +234,24 @@ export default {
 };
 </script>
 <style lang="css" scoped>
-/* .table-data { */
-/* margin-top: 20px; */
-/* } */
 .footBtn {
   margin-top: 20px;
+}
+.pagination {
+  margin: 20px 0;
+  text-align: right;
+}
+.table-toolbar {
+  line-height: 36px;
+  display: flex;
+}
+.table-toolbar .tabs {
+  flex: 1;
+}
+.toolbar .el-icon {
+  cursor: pointer;
+  color: #333;
+  font-size: 24px;
+  margin-right: 12px;
 }
 </style>

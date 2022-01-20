@@ -1,7 +1,6 @@
 class HandleField {
   handler = {};
   register(key, option) {
-    console.log(this);
     this.handler[key] = option;
   }
   format(key, options) {
@@ -78,7 +77,7 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
     let fieldOptions = {
       defaultValue: "",
       type: "normal-input",
-      span: formItemCol,
+      span: Number(formItemCol),
       disabled: !!allDisabled,
       textModel: !!textModel,
       ...field,

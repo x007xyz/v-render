@@ -1,4 +1,6 @@
+import dayjs from "dayjs";
 import RenderForm, { registerHandler } from "./render-form";
+import RenderTable, { registerFormatter } from "./render-table";
 import NormalInput from "./normal-input";
 import NumberInput from "./number-input";
 import NormalSelect from "./normal-select";
@@ -14,7 +16,10 @@ import ChildForm from "./child-form";
 export default {
   install(Vue) {
     Vue.component("RenderForm", RenderForm);
-
+    Vue.component("RenderTable", RenderTable);
+    registerFormatter("formatDateTime", (date) => {
+      return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+    });
     // 全局注册元素组件
     Vue.component("normal-input", NormalInput);
     Vue.component("number-input", NumberInput);

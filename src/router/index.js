@@ -60,6 +60,11 @@ const routes = [
     name: "Slot",
     component: () => import("../../examples/components/SlotComp.vue"),
   },
+  {
+    path: "/table/index",
+    name: "Table",
+    component: () => import("../../examples/table/index.vue"),
+  },
 ];
 
 const router = new VueRouter({
