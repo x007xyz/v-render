@@ -12,9 +12,9 @@
       :fetchData="list"
       :defaultRows="5"
       defaultLayout="total, prev, pager, next"
-      :columns="columns"
+      :columns="showTableColumns"
     >
-      <template v-slot:operations="{ row }">
+      <template #handle="{ row }">
         <el-link
           v-if="!textModel"
           type="danger"
@@ -86,6 +86,18 @@ export default {
     return {
       list: [],
     };
+  },
+  computed: {
+    showTableColumns() {
+      // 显示表格的配置
+      if (!this.textModel) {
+        return this.columns.concat({
+          label: "操作",
+          slotName: "handle",
+        });
+      }
+      return this.columns;
+    },
   },
   methods: {
     onConfirm(list) {
