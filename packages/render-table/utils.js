@@ -56,6 +56,5 @@ export const getColumnAttr = (schema) => {
       }
     }
   });
-  console.log("attr", attr);
   return attr;
 };

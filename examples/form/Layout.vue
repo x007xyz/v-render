@@ -1,11 +1,26 @@
 <template>
   <div id="app">
-    <el-radio-group v-model="formItemCol">
-      <el-radio-button :label="24">Span24</el-radio-button>
-      <el-radio-button :label="12">Span12</el-radio-button>
-      <el-radio-button :label="6">Span6</el-radio-button>
-    </el-radio-group>
-    <RenderForm :fields="fields" :formItemCol="formItemCol">
+    <div>
+      formItemCol：form-item占据的大小
+      <el-radio-group v-model="formItemCol">
+        <el-radio-button :label="24">Span24</el-radio-button>
+        <el-radio-button :label="12">Span12</el-radio-button>
+        <el-radio-button :label="6">Span6</el-radio-button>
+      </el-radio-group>
+    </div>
+    <div>
+      formItemSize：表单元素占据form-item的大小
+      <el-radio-group v-model="formItemSize">
+        <el-radio-button label="80%"></el-radio-button>
+        <el-radio-button label="50%"></el-radio-button>
+        <el-radio-button label="20%"></el-radio-button>
+      </el-radio-group>
+    </div>
+    <RenderForm
+      :fields="fields"
+      :formItemCol="formItemCol"
+      :formItemSize="formItemSize"
+    >
       <template #submit>
         <el-button type="primary">提交</el-button>
       </template>
@@ -17,6 +32,7 @@ export default {
   data() {
     return {
       formItemCol: 12,
+      formItemSize: "80%",
       fields: [
         {
           label: "表单布局",

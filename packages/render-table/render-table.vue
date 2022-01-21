@@ -270,3 +270,8 @@ export default {
   margin-right: 12px;
 }
 </style>
+<style lang="css">
+.el-table th {
+  background-color: #f5f7fa !important;
+}
+</style>

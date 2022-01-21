@@ -85,6 +85,7 @@
                         :key="rowItem.key"
                         :value="formData[rowItem.key]"
                         @input="updateValue(rowItem.key, $event)"
+                        style="width: 100%"
                         v-bind="rowItem.props"
                       ></component>
                     </el-form-item>
@@ -150,6 +151,12 @@ export default {
       type: [Number, String],
       default: 12,
     },
+    // 表单组件占据每一个form-item的宽度
+    // 可以设置常用的width的值
+    formItemSize: {
+      type: String,
+      default: "80%",
+    },
     // 左右模式或者上下模式。top 为上下，left/right 为左右（指左右时，label 是左对齐或右对齐）
     labelPosition: {
       type: String,
@@ -204,6 +211,7 @@ export default {
         allDisabled: this.allDisabled,
         textModel: this.textModel,
         formItemCol: this.formItemCol,
+        formItemSize: this.formItemSize,
       };
     },
     // 完整的fields，合并了默认值，全局设置

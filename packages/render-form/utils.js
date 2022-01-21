@@ -71,7 +71,7 @@ export const getAllBlocks = (fields, globalOption, updateField = {}) => {
 };
 
 export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
-  const { allDisabled, textModel, formItemCol } = globalOption;
+  const { allDisabled, textModel, formItemCol, formItemSize } = globalOption;
   return fields.map((field) => {
     // 获取完整的参数
     let fieldOptions = {
@@ -80,6 +80,7 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
       span: Number(formItemCol),
       disabled: !!allDisabled,
       textModel: !!textModel,
+      size: formItemSize,
       ...field,
     };
     // 根据组件类型处理数据
@@ -97,6 +98,7 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
       key,
       label,
       name,
+      size,
       nextRowFirst,
       currentRowLast,
       hidden,
@@ -104,7 +106,7 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
       ...other
     } = fieldOptions;
     return {
-      props: { ...other, ...props },
+      props: { ...other, ...props, style: { width: size } },
       defaultValue,
       type,
       span,
