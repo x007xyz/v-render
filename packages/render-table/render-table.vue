@@ -41,29 +41,23 @@
         :key="column.id"
         v-bind="getColumnAttr(column)"
       >
-        <template v-if="column.render" v-slot="scope">
-          <TableItem :scope="scope" :render="column.render"></TableItem>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        v-bind="operationAttr"
-        v-if="isSlotOperations || operations"
-      >
-        <template slot-scope="scope">
-          <slot name="operations" v-bind="scope"></slot>
-          <template v-if="!isSlotOperations">
-            <template v-for="(operation, index) in operations">
-              <el-button
-                v-if="!(operation.hidden && operation.hidden(scope.row))"
-                :key="index"
-                type="text"
-                size="small"
-                @click="operation.handle(scope.row)"
-                >{{ operation.label }}</el-button
-              >
-            </template>
-          </template>
+        <template v-if="column.render || column.slotName" v-slot="scope">
+          <TableItem
+            v-if="column.render"
+            :scope="scope"
+            :render="column.render"
+          ></TableItem>
+          <!-- 直接使用v-bind="scope"或者{{scope}}都会报错 -->
+          <!-- 这里必须分开赋值，不能使用解构语法，不然会报错，应该是对象循环引用导致的 -->
+          <slot
+            v-else
+            :name="column.slotName"
+            v-bind="{
+              row: scope.row,
+              column: scope.column,
+              $index: scope.$index,
+            }"
+          ></slot>
         </template>
       </el-table-column>
     </el-table>
@@ -109,9 +103,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    operationAttr: Object,
     columns: Array,
-    operations: Array,
     fetchData: {
       type: [Function, Array],
       required: true,

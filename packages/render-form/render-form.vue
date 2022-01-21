@@ -77,7 +77,7 @@
                       :prop="rowItem.key"
                     >
                       <div v-if="rowItem.type === 'slot'">
-                        <slot :name="rowItem.name"></slot>
+                        <slot :name="rowItem.name" v-bind="rowItem"></slot>
                       </div>
                       <component
                         v-else

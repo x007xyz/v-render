@@ -10,6 +10,9 @@
 <<< @/examples/components/SearchSelect.vue
 :::
 ## 表格选择框
+:::demo
+<<< @/examples/components/Table.vue
+:::
 ## 子表单
 子表单是在表单中嵌入表单，不支持循环设置子表单（子表单内不支持子表单）；子表单配置和表单配置相似，`headerLabel`设置子表单名称。
 在`watcher`监听表单数据，对与子表单只支持监听整个子表单数据的变化，子表单任意数据变化都都会触发子表单的监听事件。

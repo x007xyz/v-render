@@ -4,7 +4,7 @@
     :searchField="fields"
     :fetchData="getListByPage"
   >
-    <template #operations>
+    <template #handle>
       <el-button type="text">预定</el-button>
     </template>
   </RenderTable>
@@ -159,6 +159,10 @@ export default {
           prop: "created_at",
           label: "成立时间",
           formatter: "formatDateTime",
+        },
+        {
+          label: "操作",
+          slotName: "handle",
         },
       ],
     };

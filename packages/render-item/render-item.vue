@@ -7,6 +7,7 @@ export default {
     render: [String, Function],
   },
   render(h, context) {
+    console.log(context.props.scope);
     if (typeof context.props.render === "string") {
       return <template>{context.props.render}</template>;
     }
