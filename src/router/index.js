@@ -1,15 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
   {
     path: "/form/base",
     name: "Base",
@@ -64,6 +58,11 @@ const routes = [
     path: "/comp/table",
     name: "cTable",
     component: () => import("../../examples/components/Table.vue"),
+  },
+  {
+    path: "/comp/custom",
+    name: "custom",
+    component: () => import("../../examples/components/Custom.vue"),
   },
   {
     path: "/table/index",

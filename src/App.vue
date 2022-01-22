@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <router-link to="/">首页</router-link>
-    -
     <router-link to="/form/base">典型表单</router-link>
     -
     <router-link to="/form/status">表单状态</router-link>
@@ -23,6 +21,8 @@
     <router-link to="/comp/slot">slot</router-link>
     -
     <router-link to="/comp/table">表格选择器</router-link>
+    -
+    <router-link to="/comp/custom">自定义组件</router-link>
     -
     <router-link to="/table/index">表格</router-link>
     <router-view></router-view>

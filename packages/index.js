@@ -14,7 +14,7 @@ import SearchSelect from "./search-select";
 import ChildForm from "./child-form";
 import TableSelect from "./table-select";
 export default {
-  install(Vue) {
+  install(Vue, customCompMap = {}) {
     Vue.component("RenderForm", RenderForm);
     Vue.component("RenderTable", RenderTable);
     registerFormatter("formatDateTime", (date) => {
@@ -88,6 +88,13 @@ export default {
       if (options.defaultValue === "") {
         options.defaultValue = [];
       }
+    });
+    // 自定义组件
+    Object.keys(customCompMap).forEach((key) => {
+      const item = customCompMap[key];
+      Vue.component(key, item.component);
+
+      registerHandler("table", item.handler || function () {});
     });
   },
 };
