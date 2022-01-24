@@ -1,8 +1,10 @@
 {
   "name": "v-render2",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.3.1",
   "main": "./dist/index.umd.min.js",
+  "files": [
+    "dist/index.umd.min.js"
+  ],
   "description": "v-render是基于`vue2.0`的中后台解决方案，支持通过json生成表单、详情、表格，内置封装大量常用组件和基本功能，开箱即用，同时也支持自定义扩展，还提供可视化编辑器快速生成页面。",
   "author": "x007",
   "scripts": {
@@ -11,7 +13,7 @@
     "lint": "vue-cli-service lint",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "publish": "npm build && npm publish"
+    "postpublish": "npm run build && npm publish"
   },
   "dependencies": {
     "async-validator": "1.11.5",
@@ -20,6 +22,7 @@
     "dayjs": "^1.10.7",
     "element-ui": "^2.15.6",
     "lodash.clonedeep": "^4.5.0",
+    "v-render2": "^0.3.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
   },
