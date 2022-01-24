@@ -1,6 +1,7 @@
 module.exports = {
   // 站点配置
   lang: 'zh-CN',
+  base: '/v-render/',
   title: 'v-render',
   description: '基于`vue2.0`的中后台解决方案',
 

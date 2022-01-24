@@ -10,6 +10,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --name index packages/index.js",
+    "deploy": "bash ./script/deploy.sh",
     "lint": "vue-cli-service lint",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",

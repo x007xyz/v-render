@@ -42,8 +42,8 @@ export class Storage {
   }
 }
 
-export const lStorage = new Storage(localStorage);
-export const sStorage = new Storage(sessionStorage);
+export const lStorage = new Storage(window.localStorage);
+export const sStorage = new Storage(window.sessionStorage);
 
 export const getCache = (key) => {
   return lStorage.getItem(key) || sStorage.getItem(key);
