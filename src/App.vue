@@ -25,6 +25,8 @@
     <router-link to="/comp/custom">自定义组件</router-link>
     -
     <router-link to="/table/index">表格</router-link>
+    -
+    <router-link to="/generator/index">生成器</router-link>
     <router-view></router-view>
   </div>
 </template>

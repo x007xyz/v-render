@@ -26,8 +26,8 @@ module.exports = {
         link: '/render-table/'
       },
       {
-        text: 'v-editor',
-        link: '/v-editor/'
+        text: 'generator',
+        link: '/generator/'
       }
     ],
     sidebar: {

@@ -107,6 +107,7 @@ export default {
             {
               label: "普通输入框",
               key: "input",
+              type: "input",
             },
             {
               label: "表格选择框",

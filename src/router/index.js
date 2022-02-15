@@ -69,6 +69,11 @@ const routes = [
     name: "Table",
     component: () => import("../../examples/table/index.vue"),
   },
+  {
+    path: "/generator/index",
+    name: "generator",
+    component: () => import("../../examples/generator/index.vue"),
+  },
 ];
 
 const router = new VueRouter({
