@@ -94,7 +94,7 @@ export default {
       const item = customCompMap[key];
       Vue.component(key, item.component);
 
-      registerHandler("table", item.handler || function () {});
+      registerHandler(key, item.handler || function () {});
     });
   },
 };
