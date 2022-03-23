@@ -23,7 +23,7 @@
       :label-position="labelPosition"
     >
       <!-- 区块级，每个 filed 是一个区块 -->
-      <div v-for="block in curFields" :key="block.label">
+      <div v-for="block in allFields" :key="block.label">
         <div
           :class="block.class"
           v-if="
@@ -50,50 +50,39 @@
               </span>
             </template>
           </div>
-
-          <template v-for="(row, rowIndex) in block.children">
-            <el-row
-              :gutter="20"
-              :key="rowIndex"
-              class="block-content"
-              :class="{ 'block-hidden': foldBlockList.indexOf(block.id) > -1 }"
+          <div class="flex-box">
+            <el-col
+              v-for="rowItem in block.children"
+              :key="rowItem.key"
+              :span="rowItem.span"
+              :style="rowItem.style || {}"
             >
-              <template v-for="rowItem in row">
-                <div :key="rowItem.key">
-                  <el-col
-                    :span="rowItem.span"
-                    :key="rowItem.key"
-                    :style="rowItem.style || {}"
-                  >
-                    <div v-if="rowItem.type === 'slot-single'">
-                      <slot :name="rowItem.name"></slot>
-                    </div>
-                    <el-form-item
-                      v-else
-                      :style="rowItem.style"
-                      :class="rowItem.class"
-                      :rules="rowItem.rules"
-                      :label="rowItem.label ? rowItem.label + ':' : ' '"
-                      :prop="rowItem.key"
-                    >
-                      <div v-if="rowItem.type === 'slot'">
-                        <slot :name="rowItem.name" v-bind="rowItem"></slot>
-                      </div>
-                      <component
-                        v-else
-                        :is="rowItem.type"
-                        :key="rowItem.key"
-                        :value="formData[rowItem.key]"
-                        @input="updateValue(rowItem.key, $event)"
-                        style="width: 100%"
-                        v-bind="rowItem.props"
-                      ></component>
-                    </el-form-item>
-                  </el-col>
+              <div v-if="rowItem.type === 'slot-single'">
+                <slot :name="rowItem.name"></slot>
+              </div>
+              <el-form-item
+                v-else
+                :style="rowItem.style"
+                :class="rowItem.class"
+                :rules="rowItem.rules"
+                :label="rowItem.label ? rowItem.label + ':' : ' '"
+                :prop="rowItem.key"
+              >
+                <div v-if="rowItem.type === 'slot'">
+                  <slot :name="rowItem.name" v-bind="rowItem"></slot>
                 </div>
-              </template>
-            </el-row>
-          </template>
+                <component
+                  v-else
+                  :is="rowItem.type"
+                  :key="rowItem.key"
+                  :value="formData[rowItem.key]"
+                  @input="updateValue(rowItem.key, $event)"
+                  style="width: 100%"
+                  v-bind="rowItem.props"
+                ></component>
+              </el-form-item>
+            </el-col>
+          </div>
           <!-- <el-divider v-if="field.divider" /> -->
         </div>
       </div>
@@ -325,4 +314,9 @@ export default {
 
 <style scoped lang="scss">
 @import "./style.scss";
+.flex-box {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 24px;
+}
 </style>
