@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>介绍 | v-render</title>
+    <meta name="generator" content="VuePress 1.9.5">
+    
+    <meta name="description" content="基于`vue2.0`的中后台解决方案">
+    
+    <link rel="preload" href="/v-render/assets/css/0.styles.fc4d7f44.css" as="style"><link rel="preload" href="/v-render/assets/js/app.6208e195.js" as="script"><link rel="preload" href="/v-render/assets/js/2.fddfd22d.js" as="script"><link rel="preload" href="/v-render/assets/js/21.ba7819f3.js" as="script"><link rel="prefetch" href="/v-render/assets/js/10.8e7d1c23.js"><link rel="prefetch" href="/v-render/assets/js/11.ec048a39.js"><link rel="prefetch" href="/v-render/assets/js/12.cbf2f767.js"><link rel="prefetch" href="/v-render/assets/js/13.0450b900.js"><link rel="prefetch" href="/v-render/assets/js/14.5a510d86.js"><link rel="prefetch" href="/v-render/assets/js/15.61952a8b.js"><link rel="prefetch" href="/v-render/assets/js/16.83f9ad6a.js"><link rel="prefetch" href="/v-render/assets/js/17.8e73ec5b.js"><link rel="prefetch" href="/v-render/assets/js/18.4616902e.js"><link rel="prefetch" href="/v-render/assets/js/19.fb206528.js"><link rel="prefetch" href="/v-render/assets/js/20.ffda150e.js"><link rel="prefetch" href="/v-render/assets/js/22.5237a05a.js"><link rel="prefetch" href="/v-render/assets/js/3.925b0ef8.js"><link rel="prefetch" href="/v-render/assets/js/4.eec34fc0.js"><link rel="prefetch" href="/v-render/assets/js/5.474fa358.js"><link rel="prefetch" href="/v-render/assets/js/6.e3b83db0.js"><link rel="prefetch" href="/v-render/assets/js/7.adcce194.js"><link rel="prefetch" href="/v-render/assets/js/8.c99bfb17.js"><link rel="prefetch" href="/v-render/assets/js/9.ee292c1d.js">
+    <link rel="stylesheet" href="/v-render/assets/css/0.styles.fc4d7f44.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/v-render/" class="home-link router-link-active"><img src="https://vuejs.org/images/logo.png" alt="v-render" class="logo"> <span class="site-name can-hide">v-render</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/v-render/guide/" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  指南
+</a></div><div class="nav-item"><a href="/v-render/render-form/" class="nav-link">
+  render-form
+</a></div><div class="nav-item"><a href="/v-render/render-table/" class="nav-link">
+  render-table
+</a></div><div class="nav-item"><a href="/v-render/generator/" class="nav-link">
+  generator
+</a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/v-render/guide/" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  指南
+</a></div><div class="nav-item"><a href="/v-render/render-form/" class="nav-link">
+  render-form
+</a></div><div class="nav-item"><a href="/v-render/render-table/" class="nav-link">
+  render-table
+</a></div><div class="nav-item"><a href="/v-render/generator/" class="nav-link">
+  generator
+</a></div> <!----></nav>  <!----> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="介绍"><a href="#介绍" class="header-anchor">#</a> 介绍</h1> <p>v-render是基于<code>vue2.0</code>的中后台解决方案，支持通过json生成表单、详情、表格，内置封装大量常用组件和基本功能，开箱即用，同时也支持自定义扩展，还提供可视化编辑器快速生成页面。</p> <h1 id="安装"><a href="#安装" class="header-anchor">#</a> 安装</h1> <p><code>v-render</code>依赖<code>element-ui</code>，需要先引入<code>element-ui</code></p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">import</span> ElementUI <span class="token keyword">from</span> <span class="token string">&quot;element-ui&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token string">&quot;element-ui/lib/theme-chalk/index.css&quot;</span><span class="token punctuation">;</span> <span class="token comment">// 默认主题</span>
+<span class="token keyword">import</span> VRender <span class="token keyword">from</span> <span class="token string">&quot;@v-render&quot;</span><span class="token punctuation">;</span>
+
+Vue<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>ElementUI<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+Vue<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>VRender<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/v-render/assets/js/app.6208e195.js" defer></script><script src="/v-render/assets/js/2.fddfd22d.js" defer></script><script src="/v-render/assets/js/21.ba7819f3.js" defer></script>
+  </body>
+</html>
