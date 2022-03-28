@@ -7,6 +7,9 @@
     <template #handle>
       <el-button type="text">预定</el-button>
     </template>
+    <template #submit2>
+      <el-button type="primary">新增</el-button>
+    </template>
   </RenderTable>
 </template>
 <script>
@@ -128,6 +131,16 @@ export default {
               label: "打烊了",
             },
           ],
+        },
+        // 通过显示声明submit可以调整它的位置
+        // 如果传入slot submit可以覆盖原本的submit
+        {
+          name: "submit",
+          type: "slot",
+        },
+        {
+          name: "submit2",
+          type: "slot",
         },
       ],
       columns: [

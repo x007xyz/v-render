@@ -6,6 +6,9 @@
           <el-button type="primary" @click="onClickSearch">搜索</el-button>
           <el-button @click="onClickReset">重置</el-button>
         </template>
+        <template v-for="slotName in fieldSlotNames" v-slot:[slotName]>
+          <slot :name="slotName"></slot>
+        </template>
       </RenderForm>
     </div>
     <div class="table-toolbar" v-if="visibleToolbar">
@@ -161,6 +164,14 @@ export default {
       if (!this.searchField || this.searchField.length === 0) {
         return null;
       }
+      // slot submit 处理
+      const isExistSlotSubmit = this.searchField.some((field) => {
+        return field.name === "submit";
+      });
+      if (isExistSlotSubmit) {
+        return [{ label: "", children: [...this.searchField] }];
+      }
+      // 不存在就追加到最后
       return [
         {
           label: "",
@@ -173,6 +184,12 @@ export default {
           ],
         },
       ];
+    },
+    fieldSlotNames() {
+      const slots = this.$scopedSlots;
+      return this.searchField
+        .filter((field) => field.type === "slot" && slots[field.name])
+        .map((field) => field.name);
     },
     isSlotExpand() {
       return !!this.$slots.expand || !!this.$scopedSlots.expand;
