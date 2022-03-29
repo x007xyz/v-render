@@ -1,7 +1,10 @@
 <template>
   <div class="child-form-container">
     <div class="child-form" v-for="(data, index) in value" :key="index">
-      <div class="child-form-head">{{ headerLabel }}{{ index + 1 }}</div>
+      <div class="child-form-head">
+        <span>{{ headerLabel }}{{ index + 1 }}</span>
+        <el-button type="text" @click="onDelete(index)">删除</el-button>
+      </div>
       <div class="child-form-body">
         <el-form
           ref="form"
@@ -120,6 +123,10 @@ export default {
     },
   },
   methods: {
+    onDelete(index) {
+      this.value.splice(index, 1);
+      this.$emit("input", this.value);
+    },
     updateValue(index, key, value) {
       console.log(key);
       if (typeof value === "string") {
@@ -148,4 +155,10 @@ export default {
 
 <style scoped lang="scss">
 @import "./style.scss";
+.child-form-head {
+  display: flex;
+  span {
+    flex: 1;
+  }
+}
 </style>
