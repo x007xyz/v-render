@@ -6,10 +6,15 @@
       inactive-text="表单模式"
     ></normal-switch>
     <RenderForm
+      ref="form"
       :fields="fields"
       :textModel="textModel"
       :watcher="watcher"
-    ></RenderForm>
+    >
+      <template #submit>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
+      </template>
+    </RenderForm>
   </div>
 </template>
 <script>
@@ -41,13 +46,26 @@ export default {
                 {
                   key: "key01",
                   label: "子表单的输入框",
+                  rules: [{ required: true, message: "必填项" }],
                 },
               ],
+            },
+            {
+              name: "submit",
+              type: "slot",
+              label: "",
             },
           ],
         },
       ],
     };
+  },
+  methods: {
+    onSubmit() {
+      this.$refs.form.validate().then((valid) => {
+        console.log("valid", valid);
+      });
+    },
   },
 };
 </script>

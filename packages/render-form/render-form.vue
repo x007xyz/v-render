@@ -98,6 +98,11 @@ import { getFieldRow, getAllBlocks } from "./utils.js";
 
 export default {
   name: "render-form",
+  provide() {
+    return {
+      mainForm: this,
+    };
+  },
   props: {
     // watcher 监听数据变化
     // 只在表单修改数据时监听，直接修改formData的值时不触发
@@ -172,6 +177,7 @@ export default {
   },
   data() {
     return {
+      childFormRefs: [],
       // 折叠block列表
       foldBlockList: [],
       // 浏览模式为single时，显示哪个block
@@ -298,7 +304,18 @@ export default {
     },
     // 校验表单数据
     validate() {
-      return this.$refs.form.validate();
+      return this.$refs.form.validate().then((valid) => {
+        if (valid) {
+          return Promise.all(
+            this.childFormRefs.map((childForm) => {
+              return childForm.validateAllForm();
+            })
+          ).then((res) => {
+            return res.every((item) => item);
+          });
+        }
+        return valid;
+      });
     },
   },
   created() {

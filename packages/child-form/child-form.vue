@@ -60,6 +60,7 @@ export default {
   components: {
     NormalInput: () => import("../normal-input"),
   },
+  inject: ["mainForm"],
   props: {
     disabled: {
       type: Boolean,
@@ -143,12 +144,26 @@ export default {
       );
     },
     addChildForm() {
-      const res = {};
-      this.allFields.forEach((field) => {
-        res[field.key] = field.defaultValue;
+      this.validateAllForm().then((valid) => {
+        if (valid) {
+          const res = {};
+          this.allFields.forEach((field) => {
+            res[field.key] = field.defaultValue;
+          });
+          this.$emit("input", this.value.concat(res));
+        }
       });
-      this.$emit("input", this.value.concat(res));
     },
+    validateAllForm() {
+      return Promise.all(this.$refs.form.map((ref) => ref.validate())).then(
+        (res) => {
+          return res.every((item) => item);
+        }
+      );
+    },
+  },
+  mounted() {
+    this.mainForm.childFormRefs.push(this);
   },
 };
 </script>
