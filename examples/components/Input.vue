@@ -21,6 +21,11 @@ export default {
                 type: "textarea",
               },
             },
+            {
+              label: "数字",
+              key: "key3",
+              type: "number",
+            },
           ],
         },
       ],

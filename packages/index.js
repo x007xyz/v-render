@@ -32,6 +32,9 @@ export default {
     registerHandler("input", (options) => {
       options.type = "normal-input";
     });
+    registerHandler("number", (options) => {
+      options.type = "number-input";
+    });
     registerHandler("checkbox", (options) => {
       options.type = "checkbox-group";
       if (options.defaultValue === "") {
