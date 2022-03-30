@@ -78,6 +78,7 @@
                   :key="rowItem.key"
                   :value="formData[rowItem.key]"
                   @input="updateValue(rowItem.key, $event)"
+                  :watcher="watcherChildFormObj[rowItem.key]"
                   style="width: 100%"
                   v-bind="rowItem.props"
                 ></component>
@@ -201,6 +202,21 @@ export default {
     },
   },
   computed: {
+    // 子表单监听方法
+    watcherChildFormObj() {
+      const res = {};
+      Object.keys(this.watcher).forEach((key) => {
+        const [childFormKey, fieldKey] = key.split(".$.");
+        if (childFormKey && fieldKey) {
+          if (res[childFormKey]) {
+            res[childFormKey][fieldKey] = this.watcher[key];
+          } else {
+            res[childFormKey] = { [fieldKey]: this.watcher[key] };
+          }
+        }
+      });
+      return res;
+    },
     globalOptions() {
       return {
         borderForm: this.borderForm,

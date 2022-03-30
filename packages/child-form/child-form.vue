@@ -62,6 +62,12 @@ export default {
   },
   inject: ["mainForm"],
   props: {
+    watcher: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -133,15 +139,9 @@ export default {
       if (typeof value === "string") {
         value = value.trim();
       }
-      this.$emit(
-        "input",
-        this.value.map((item, i) => {
-          if (i === index) {
-            item[key] = value;
-          }
-          return item;
-        })
-      );
+      this.$set(this.value[index], key, value);
+      this.watcher[key] && this.watcher[key](value, this.value[index]);
+      this.$emit("input", this.value);
     },
     addChildForm() {
       this.validateAllForm().then((valid) => {
