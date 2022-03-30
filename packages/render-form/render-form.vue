@@ -53,6 +53,7 @@
           <div class="flex-box">
             <el-col
               v-for="rowItem in block.children"
+              v-show="!rowItem.hidden"
               :key="rowItem.key"
               :span="rowItem.span"
               :style="rowItem.style || {}"

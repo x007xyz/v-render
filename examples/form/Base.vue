@@ -16,6 +16,11 @@ export default {
           label: "基础用法",
           children: [
             {
+              key: "id",
+              label: "id",
+              hidden: true,
+            },
+            {
               label: "活动名称",
               type: "input",
               key: "name",
