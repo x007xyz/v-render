@@ -25,6 +25,10 @@ export default {
   components: { RenderItem },
   inheritAttrs: false,
   props: {
+    unit: {
+      type: Number,
+      default: 1,
+    },
     value: {
       type: [String, Number],
     },
@@ -47,13 +51,14 @@ export default {
   data() {
     return {
       isFocus: false,
+      innerValue: "",
     };
   },
   computed: {
     showValue() {
       return this.isFocus
-        ? this.value
-        : toThousands(padZore(this.value, this.zeroPadding));
+        ? this.innerValue
+        : toThousands(padZore(this.innerValue, this.zeroPadding));
     },
     attrs() {
       return {
@@ -100,9 +105,32 @@ export default {
         Number(this.max) >= Number(value) &&
         Number(value) >= Number(this.min);
       if (isReg || ["", "-"].includes(value)) {
-        this.$emit("input", value);
+        this.innerValue = value;
+        this.$emit("input", value === "-" ? 0 : value * this.unit);
       }
     },
+    toRealValue(value) {
+      // 只有一个负号，则认为真实的值为0
+      if (value === "-") {
+        return 0;
+      }
+      // 其他值乘以单位值
+      return value * this.unit;
+    },
+    setInnerValue(value) {
+      if (value === null || value === undefined) {
+        return;
+      }
+      // 当innerValue的值转换之后和value的值一样时，不进行赋值
+      const isEqual = this.toRealValue(this.innerValue) === value;
+      !isEqual && (this.innerValue = value / this.unit);
+    },
+  },
+  beforeMount() {
+    this.setInnerValue(this.value);
+    this.$watch("value", (newValue) => {
+      this.setInnerValue(newValue);
+    });
   },
 };
 </script>

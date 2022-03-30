@@ -25,6 +25,11 @@ export default {
               label: "数字",
               key: "key3",
               type: "number",
+              props: {
+                decimal: 2,
+                unit: 100,
+              },
+              defaultValue: 9999,
             },
           ],
         },
