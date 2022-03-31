@@ -29,7 +29,7 @@ export default {
                 decimal: 2,
                 unit: 100,
               },
-              defaultValue: 9999,
+              defaultValue: 0,
             },
           ],
         },

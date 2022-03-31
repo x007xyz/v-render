@@ -106,19 +106,19 @@ export default {
         Number(value) >= Number(this.min);
       if (isReg || ["", "-"].includes(value)) {
         this.innerValue = value;
-        this.$emit("input", value === "-" ? 0 : value * this.unit);
+        this.$emit("input", this.toRealValue(value));
       }
     },
     toRealValue(value) {
-      // 只有一个负号，则认为真实的值为0
-      if (value === "-") {
-        return 0;
+      // 负号或者空字符串，则认为真实的值为空
+      if (value === "-" || value === "") {
+        return "";
       }
       // 其他值乘以单位值
       return value * this.unit;
     },
     setInnerValue(value) {
-      if (value === null || value === undefined) {
+      if (value === null || value === undefined || value === "") {
         return;
       }
       // 当innerValue的值转换之后和value的值一样时，不进行赋值
