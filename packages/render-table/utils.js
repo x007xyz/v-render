@@ -58,3 +58,13 @@ export const getColumnAttr = (schema) => {
   });
   return attr;
 };
+
+export const filterEmpty = (obj) => {
+  const res = {};
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] !== "") {
+      res[key] = obj[key];
+    }
+  });
+  return res;
+};

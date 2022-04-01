@@ -118,7 +118,8 @@ export default {
       return value * this.unit;
     },
     setInnerValue(value) {
-      if (value === null || value === undefined || value === "") {
+      if (value === null || value === undefined) {
+        this.innerValue = "";
         return;
       }
       // 当innerValue的值转换之后和value的值一样时，不进行赋值

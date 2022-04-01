@@ -29,7 +29,6 @@ export default {
                 decimal: 2,
                 unit: 100,
               },
-              defaultValue: 0,
             },
           ],
         },

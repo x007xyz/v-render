@@ -81,7 +81,7 @@
   </div>
 </template>
 <script>
-import { getColumnAttr } from "./utils";
+import { getColumnAttr, filterEmpty } from "./utils";
 export default {
   name: "render-table",
   components: {
@@ -241,7 +241,7 @@ export default {
         return Promise.resolve({ total: this.total, list: this.list });
       }
       return this.fetchData({
-        ...this.filter, // 过滤字段
+        ...filterEmpty(this.filter), // 过滤字段
         sortFields: this.sortFields, // 排序
         page: this.page,
         rows: this.rows,
