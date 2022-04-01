@@ -6,13 +6,23 @@
       :label="option.value"
       v-bind="getProps(option)"
     >
-      {{ option.label }}
+      <RenderItem
+        v-if="option.render"
+        :render="option.render"
+        :scope="option"
+      ></RenderItem>
+      <template v-else>
+        {{ option.label }}
+      </template>
     </el-radio>
   </el-radio-group>
 </template>
 <script>
 export default {
   name: "radio-group",
+  components: {
+    RenderItem: () => import("../render-item/render-item.vue"),
+  },
   inheritAttrs: false,
   props: {
     value: [String, Number, Boolean],
@@ -43,7 +53,7 @@ export default {
   methods: {
     getProps(data) {
       //eslint-disable-next-line
-      const { value, label, ...props } = data;
+      const { value, label, render, ...props } = data;
       return props;
     },
     onInput(value) {

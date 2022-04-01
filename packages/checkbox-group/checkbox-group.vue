@@ -6,13 +6,23 @@
       :label="option.value"
       v-bind="getProps(option)"
     >
-      {{ option.label }}
+      <RenderItem
+        v-if="option.render"
+        :render="option.render"
+        :scope="option"
+      ></RenderItem>
+      <template v-else>
+        {{ option.label }}
+      </template>
     </el-checkbox>
   </el-checkbox-group>
 </template>
 <script>
 export default {
   name: "checkbox-group",
+  components: {
+    RenderItem: () => import("../render-item/render-item.vue"),
+  },
   inheritAttrs: false,
   props: {
     value: Array,

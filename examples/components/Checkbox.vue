@@ -57,6 +57,27 @@ export default {
                 },
               ],
             },
+            {
+              label: "render渲染",
+              type: "checkbox",
+              key: "key4",
+              options: [
+                {
+                  value: 1,
+                  label: "选项1",
+                  render(h, option) {
+                    return <span style="color: red">{option.label}</span>;
+                  },
+                },
+                {
+                  value: 2,
+                  label: "选项2",
+                  render(h, option) {
+                    return <span style="color: blue">{option.label}</span>;
+                  },
+                },
+              ],
+            },
           ],
         },
       ],

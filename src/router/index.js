@@ -40,6 +40,16 @@ const routes = [
     component: () => import("../../examples/components/Input.vue"),
   },
   {
+    path: "/comp/radio",
+    name: "Radio",
+    component: () => import("../../examples/components/Radio.vue"),
+  },
+  {
+    path: "/comp/checkbox",
+    name: "Radio",
+    component: () => import("../../examples/components/Checkbox.vue"),
+  },
+  {
     path: "/comp/dict",
     name: "Dict",
     component: () => import("../../examples/components/DictSelect.vue"),
