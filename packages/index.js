@@ -14,12 +14,12 @@ import SearchSelect from "./search-select";
 import ChildForm from "./child-form";
 import TableSelect from "./table-select";
 export default {
-  install(Vue, customCompMap = {}) {
-    Vue.component("RenderForm", RenderForm);
-    Vue.component("RenderTable", RenderTable);
+  install(Vue, customCompMap = {}, customFormatter = {}) {
     registerFormatter("formatDateTime", (date) => {
       return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
     });
+    Vue.component("RenderForm", RenderForm);
+    Vue.component("RenderTable", RenderTable);
     // 全局注册元素组件
     Vue.component("normal-input", NormalInput);
     Vue.component("number-input", NumberInput);
@@ -98,6 +98,10 @@ export default {
       Vue.component(key, item.component);
 
       registerHandler(key, item.handler || function () {});
+    });
+    // 自定义formatter
+    Object.keys(customFormatter).forEach((key) => {
+      registerFormatter(key, customFormatter[key]);
     });
   },
 };
