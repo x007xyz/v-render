@@ -5,6 +5,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/form/test",
+    name: "Test",
+    component: () => import("../../examples/form/Test.vue"),
+  },
+  {
     path: "/form/base",
     name: "Base",
     component: () => import("../../examples/form/Base.vue"),

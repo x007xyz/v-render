@@ -76,7 +76,7 @@
                   v-else
                   :is="rowItem.type"
                   :key="rowItem.key"
-                  :value="formData[rowItem.key]"
+                  :value="getPropByPath(formData, rowItem.key)"
                   @input="updateValue(rowItem.key, $event)"
                   :watcher="watcherChildFormObj[rowItem.key]"
                   style="width: 100%"
@@ -245,6 +245,36 @@ export default {
     },
   },
   methods: {
+    getPropByPath(obj, path) {
+      // 处理路径
+      path = path.replace(/\[(\w+)\]/g, ".$1");
+      path = path.replace(/^\./, "");
+      const paths = path.split(".");
+      let current = obj;
+      paths.forEach((p) => {
+        current = current[p];
+      });
+      return current;
+    },
+    setPropByPath(obj, path, value, defaultValue = "") {
+      // 处理路径
+      path = path.replace(/\[(\w+)\]/g, ".$1");
+      path = path.replace(/^\./, "");
+      let tempObj = obj;
+      const paths = path.split(".");
+      const key = paths.pop();
+      for (let i = 0; i < paths.length; i++) {
+        if (tempObj[paths[i]] === undefined) {
+          this.$set(tempObj, paths[i], {});
+        }
+        tempObj = tempObj[paths[i]];
+      }
+      if (tempObj[key] === undefined) {
+        this.$set(tempObj, key, defaultValue);
+      } else {
+        this.$set(tempObj, key, value);
+      }
+    },
     // 根据fields和data的值，初始化 formData 的值
     initFormData() {
       this.$set(this, "formData", {});
@@ -254,11 +284,18 @@ export default {
           fields.children.forEach((field) => {
             // 如果key已经在data中，就取data中的值
             if (field.key) {
-              if (field.key in this.data) {
-                this.$set(this.formData, field.key, this.data[field.key]);
-              } else {
-                this.$set(this.formData, field.key, field.defaultValue);
-              }
+              this.setPropByPath(
+                this.formData,
+                field.key,
+                this.data[field.key],
+                field.defaultValue
+              );
+              // if (field.key in this.data) {
+              //   this
+              //   this.$set(this.formData, field.key, this.data[field.key]);
+              // } else {
+              //   this.$set(this.formData, field.key, field.defaultValue);
+              // }
             }
           });
         }
@@ -278,8 +315,9 @@ export default {
       if (typeof value === "string") {
         value = value.trim();
       }
+      console.log("updateValue", key, value);
       // 更新数据
-      this.$set(this.formData, key, value);
+      this.setPropByPath(this.formData, key, value);
       this.$nextTick(() => {
         this.watcher[key] &&
           this.watcher[key](value, this.formData, (key, options) => {
