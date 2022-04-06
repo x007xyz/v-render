@@ -114,6 +114,7 @@ export default {
               key: "group",
               type: "table",
               title: "选择分组",
+              defaultValue: [1026, 1025],
               fetchData,
               getItems,
               searchField: [

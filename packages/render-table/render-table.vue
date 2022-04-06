@@ -124,6 +124,16 @@ export default {
       type: String,
       default: "total, sizes, prev, pager, next, jumper",
     },
+    uniqueKey: {
+      type: String,
+      default: "id",
+    },
+    selectedItems: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   data() {
     return {
@@ -137,6 +147,13 @@ export default {
     };
   },
   watch: {
+    // 监听表格数据改变，跟随改变选中值
+    list() {
+      this.updateChecked();
+    },
+    selectedItems() {
+      this.updateChecked();
+    },
     fetchData(val) {
       // 只有在fetchData为数组时，监听fetchData，然后改变数据
       if (Array.isArray(val)) {
@@ -199,6 +216,21 @@ export default {
     },
   },
   methods: {
+    updateChecked() {
+      if (this.selection) {
+        this.list.forEach((row) => {
+          const checked = this.selectedItems.some((item) => {
+            if (typeof item === "object") {
+              return item[this.uniqueKey] === row[this.uniqueKey];
+            }
+            return item === row[this.uniqueKey];
+          });
+          this.$nextTick(() => {
+            this.$refs.table.toggleRowSelection(row, checked);
+          });
+        });
+      }
+    },
     updateFilterProp(key, value) {
       this.filter[key] = value;
     },
@@ -212,8 +244,32 @@ export default {
       this.search(1);
     },
     getColumnAttr,
-    onSelectionChange(val) {
-      this.$emit("selection-change", val);
+    onSelectionChange(selectItems) {
+      const selectSet = new Set();
+      const selectMap = new Map();
+      let itemType = "";
+      console.log("this.selectedItems", this.selectedItems, selectItems);
+      this.selectedItems.forEach((item) => {
+        itemType = typeof item;
+        if (itemType === "object") {
+          selectMap.set(item[this.uniqueKey], item);
+        } else {
+          selectMap.set(item, item);
+        }
+      });
+      selectItems.forEach((item) => {
+        selectSet.add(item[this.uniqueKey]);
+        selectMap.set(item[this.uniqueKey], item);
+      });
+      this.list.forEach((item) => {
+        if (!selectSet.has(item[this.uniqueKey])) {
+          selectMap.delete(item[this.uniqueKey]);
+        }
+      });
+      const selectedItems =
+        itemType === "object" ? [...selectMap.values()] : [...selectMap.keys()];
+      this.$emit("update:selectedItems", selectedItems);
+      this.$emit("selection-change", selectItems, this.list, selectedItems);
     },
     onExpandChange(row, expand) {
       this.$emit("expand-change", row, expand);

@@ -2,6 +2,9 @@
   <RenderTable
     :columns="columns"
     :searchField="fields"
+    :defaultRows="5"
+    selection
+    :selectedItems.sync="selectedItems"
     :fetchData="getListByPage"
   >
     <template #handle>
@@ -178,6 +181,7 @@ export default {
           slotName: "handle",
         },
       ],
+      selectedItems: [1],
     };
   },
   methods: {

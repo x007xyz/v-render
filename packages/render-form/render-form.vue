@@ -304,18 +304,13 @@ export default {
     // 更新数据
     updateFormData(data) {
       Object.keys(data).forEach((key) => {
-        // 如果 key 在值里面
-        if (key in this.formData) {
-          // 则回填这个值
-          this.updateValue(key, data[key]);
-        }
+        this.updateValue(key, data[key]);
       });
     },
     updateValue(key, value) {
       if (typeof value === "string") {
         value = value.trim();
       }
-      console.log("updateValue", key, value);
       // 更新数据
       this.setPropByPath(this.formData, key, value);
       this.$nextTick(() => {

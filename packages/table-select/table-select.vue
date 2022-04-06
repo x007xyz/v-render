@@ -72,14 +72,17 @@ export default {
     },
   },
   watch: {
-    value(val) {
-      if (this.elementType === "unique") {
-        this.getItems(val).then((data) => {
-          this.list = data;
-        });
-      } else {
-        this.list = val;
-      }
+    value: {
+      handler(val) {
+        if (this.elementType === "unique") {
+          this.getItems(val).then((data) => {
+            this.list = data;
+          });
+        } else {
+          this.list = val;
+        }
+      },
+      immediate: true,
     },
   },
   data() {
