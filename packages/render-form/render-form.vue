@@ -245,6 +245,19 @@ export default {
     },
   },
   methods: {
+    hasPropByPath(obj, path) {
+      // 处理路径
+      path = path.replace(/\[(\w+)\]/g, ".$1");
+      path = path.replace(/^\./, "");
+      const paths = path.split(".");
+      let tempObj = obj;
+      return paths.every((key) => {
+        if (tempObj && key in tempObj) {
+          tempObj = tempObj[key];
+          return true;
+        }
+      });
+    },
     getPropByPath(obj, path) {
       // 处理路径
       path = path.replace(/\[(\w+)\]/g, ".$1");
@@ -304,7 +317,9 @@ export default {
     // 更新数据
     updateFormData(data) {
       Object.keys(data).forEach((key) => {
-        this.updateValue(key, data[key]);
+        if (this.hasPropByPath(this.formData, key)) {
+          this.updateValue(key, data[key]);
+        }
       });
     },
     updateValue(key, value) {

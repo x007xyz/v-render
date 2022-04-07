@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import RenderForm, { registerHandler } from "./render-form";
 import RenderTable, { registerFormatter } from "./render-table";
 import NormalInput from "./normal-input";
@@ -15,9 +14,6 @@ import ChildForm from "./child-form";
 import TableSelect from "./table-select";
 export default {
   install(Vue, customCompMap = {}, customFormatter = {}) {
-    registerFormatter("formatDateTime", (date) => {
-      return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
-    });
     Vue.component("RenderForm", RenderForm);
     Vue.component("RenderTable", RenderTable);
     // 全局注册元素组件

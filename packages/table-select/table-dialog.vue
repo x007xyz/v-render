@@ -19,9 +19,6 @@
 <script>
 export default {
   name: "table-dialog",
-  components: {
-    RenderTable: () => import("../render-table"),
-  },
   props: {
     fetchData: [Function, Array],
     searchField: Array,

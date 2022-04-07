@@ -41,11 +41,11 @@
  * getItems通过已有数据查询显示数据，没有详细数据要使用ids获取详细数据和分页
  * 表格内容 columns
  */
+import TableDialog from "./table-dialog.vue";
 export default {
   name: "table-select",
   components: {
-    RenderTable: () => import("../render-table"),
-    TableDialog: () => import("./table-dialog.vue"),
+    TableDialog,
   },
   props: {
     value: {

@@ -247,7 +247,7 @@ export default {
     onSelectionChange(selectItems) {
       const selectSet = new Set();
       const selectMap = new Map();
-      let itemType = "";
+      let itemType = "object";
       console.log("this.selectedItems", this.selectedItems, selectItems);
       this.selectedItems.forEach((item) => {
         itemType = typeof item;
