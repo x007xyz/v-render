@@ -7,18 +7,9 @@ export default {
   },
   render(h, context) {
     if (context.props.textModel) {
-      return (
-        <div className="text-model">
-          {() => {
-            const { value } = context.data.model;
-            if (value) {
-              return toThousands(padZore(value, this.zeroPadding));
-            } else {
-              return "-";
-            }
-          }}
-        </div>
-      );
+      let { value, unit = 1, zeroPadding = 0 } = context.data.attrs;
+      value = value ? toThousands(padZore(value / unit, zeroPadding)) : "-";
+      return <div className="text-model">{value}</div>;
     } else {
       return h(NumberInput, context.data, context.children);
     }
