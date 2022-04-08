@@ -303,15 +303,12 @@ export default {
                 this.data[field.key],
                 field.defaultValue
               );
-              // if (field.key in this.data) {
-              //   this
-              //   this.$set(this.formData, field.key, this.data[field.key]);
-              // } else {
-              //   this.$set(this.formData, field.key, field.defaultValue);
-              // }
             }
           });
         }
+      });
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate();
       });
     },
     // 更新数据
