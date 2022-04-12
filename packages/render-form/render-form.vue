@@ -2,7 +2,7 @@
   <div class="render-form" :class="{ 'border-form': borderForm }">
     <div class="scan-type" v-if="scanType === 'single'">
       <div class="block-btn-list">
-        <template v-for="block in curFields">
+        <template v-for="block in allBlocks">
           <div
             class="block-btn"
             :class="{ focus: singleScanBlock === block.id }"
@@ -23,7 +23,7 @@
       :label-position="labelPosition"
     >
       <!-- 区块级，每个 filed 是一个区块 -->
-      <div v-for="block in allFields" :key="block.label">
+      <div v-for="block in allBlocks" :key="block.label">
         <div
           :class="block.class"
           v-if="
@@ -51,7 +51,14 @@
             </template>
           </div>
           <div class="flex-box">
-            <el-col
+            <RenderField
+              v-for="rowItem in block.children"
+              :key="rowItem.prop"
+              :prop="rowItem.prop"
+              :comp="rowItem.comp"
+            >
+            </RenderField>
+            <!-- <el-col
               v-for="rowItem in block.children"
               v-show="!rowItem.hidden"
               :key="rowItem.key"
@@ -83,7 +90,7 @@
                   v-bind="rowItem.props"
                 ></component>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </div>
           <!-- <el-divider v-if="field.divider" /> -->
         </div>
@@ -95,10 +102,14 @@
 
 <script>
 import clonedeep from "lodash.clonedeep";
-import { getFieldRow, getAllBlocks } from "./utils.js";
+import { getAllBlocks, getFieldOptions } from "./utils.js";
+import { hasPropByPath } from "./core/utils";
 
 export default {
   name: "render-form",
+  components: {
+    RenderField: () => import("./core/render-field.vue"),
+  },
   provide() {
     return {
       mainForm: this,
@@ -186,6 +197,7 @@ export default {
       // 更新field options的值，根据key匹配
       updateField: {},
       formData: {},
+      fieldOptions: [],
     };
   },
   watch: {
@@ -193,7 +205,7 @@ export default {
       handler(val) {
         if (val === "single") {
           this.foldBlockList = [];
-          this.singleScanBlock = this.allFields[0].id;
+          this.singleScanBlock = this.allBlocks[0].id;
         } else {
           this.singleScanBlock = "";
         }
@@ -226,48 +238,14 @@ export default {
         formItemSize: this.formItemSize,
       };
     },
-    // 完整的fields，合并了默认值，全局设置
-    allFields() {
-      return getAllBlocks(
-        clonedeep(this.fields),
-        this.globalOptions,
-        this.updateField
-      );
-    },
-    curFields() {
-      return this.allFields.map((block) => {
-        // 对字段进行布局处理
-        // 对属性为hidden的字段进行过滤
-        // 需要将字段划分到每行
-        const fields = block.children.filter((field) => !field.hidden);
-        return { ...block, children: getFieldRow(fields) };
-      });
+    // 模块数组
+    allBlocks() {
+      return getAllBlocks(this.fields, this.globalOptions);
     },
   },
   methods: {
-    hasPropByPath(obj, path) {
-      // 处理路径
-      path = path.replace(/\[(\w+)\]/g, ".$1");
-      path = path.replace(/^\./, "");
-      const paths = path.split(".");
-      let tempObj = obj;
-      return paths.every((key) => {
-        if (tempObj && key in tempObj) {
-          tempObj = tempObj[key];
-          return true;
-        }
-      });
-    },
-    getPropByPath(obj, path) {
-      // 处理路径
-      path = path.replace(/\[(\w+)\]/g, ".$1");
-      path = path.replace(/^\./, "");
-      const paths = path.split(".");
-      let current = obj;
-      paths.forEach((p) => {
-        current = current[p];
-      });
-      return current;
+    getFieldOptionByProp(prop) {
+      return this.fieldOptions.find((item) => item.key === prop);
     },
     setPropByPath(obj, path, value, defaultValue = "") {
       // 处理路径
@@ -288,23 +266,33 @@ export default {
         this.$set(tempObj, key, value);
       }
     },
+    init() {
+      this.initFieldOptions();
+      this.initFormData();
+    },
+    // 初始化字段配置项
+    initFieldOptions() {
+      const fieldOptions = getFieldOptions(
+        this.fields.reduce((res, { children }) => {
+          return res.concat(children);
+        }, []),
+        this.globalOptions
+      );
+      this.$set(this, "fieldOptions", fieldOptions);
+    },
     // 根据fields和data的值，初始化 formData 的值
     initFormData() {
       this.$set(this, "formData", {});
       // 通过fields初始化formData的key
-      this.allFields.forEach((fields) => {
-        if (fields.children && Array.isArray(fields.children)) {
-          fields.children.forEach((field) => {
-            // 如果key已经在data中，就取data中的值
-            if (field.key) {
-              this.setPropByPath(
-                this.formData,
-                field.key,
-                this.data[field.key],
-                field.defaultValue
-              );
-            }
-          });
+      this.fieldOptions.forEach((field) => {
+        // 如果key已经在data中，就取data中的值
+        if (field.key) {
+          this.setPropByPath(
+            this.formData,
+            field.key,
+            this.formData[field.key],
+            field.defaultValue
+          );
         }
       });
       this.$nextTick(() => {
@@ -314,7 +302,7 @@ export default {
     // 更新数据
     updateFormData(data) {
       Object.keys(data).forEach((key) => {
-        if (this.hasPropByPath(this.formData, key)) {
+        if (hasPropByPath(this.formData, key)) {
           this.updateValue(key, data[key]);
         }
       });
@@ -323,6 +311,7 @@ export default {
       if (typeof value === "string") {
         value = value.trim();
       }
+      console.log("updateValue", key, value);
       // 更新数据
       this.setPropByPath(this.formData, key, value);
       this.$nextTick(() => {
@@ -346,7 +335,7 @@ export default {
     },
     foldAllBlock() {
       if (this.foldBlockList.length === 0) {
-        this.foldBlockList = this.allFields.map(({ id }) => id);
+        this.foldBlockList = this.allBlocks.map(({ id }) => id);
       } else {
         this.foldBlockList = [];
       }
@@ -380,12 +369,9 @@ export default {
     },
   },
   created() {
-    this.initFormData();
+    this.init();
     this.$watch("fields", () => {
-      this.initFormData();
-    });
-    this.$watch("data", () => {
-      this.initFormData();
+      this.init();
     });
   },
 };

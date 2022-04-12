@@ -24,6 +24,7 @@ export default {
               label: "活动名称",
               type: "input",
               key: "activity.name",
+              defaultValue: "test",
             },
             {
               label: "活动区域",

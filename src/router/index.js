@@ -45,6 +45,11 @@ const routes = [
     component: () => import("../../examples/components/Input.vue"),
   },
   {
+    path: "/comp/number",
+    name: "Number",
+    component: () => import("../../examples/components/Number.vue"),
+  },
+  {
     path: "/comp/radio",
     name: "Radio",
     component: () => import("../../examples/components/Radio.vue"),

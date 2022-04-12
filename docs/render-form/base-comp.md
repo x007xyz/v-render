@@ -17,6 +17,8 @@
 :::demo
 <<< @/examples/components/Input.vue
 :::
+## 数字输入框
+
 ## 选择框
 :::demo
 <<< @/examples/components/Select.vue

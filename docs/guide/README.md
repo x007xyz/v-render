@@ -5,7 +5,7 @@ v-render是基于`vue2.0`的中后台解决方案，支持通过json生成表单
 ```js
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css"; // 默认主题
-import VRender from "@v-render";
+import VRender from "v-render2";
 
 Vue.use(ElementUI);
 
