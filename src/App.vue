@@ -10,6 +10,8 @@
     -
     <router-link to="/form/rules">表单校验</router-link>
     -
+    <router-link to="/form/watcher">表单联动</router-link>
+    -
     <router-link to="/form/config">配置项</router-link>
     -
     <router-link to="/comp/input">输入框</router-link>

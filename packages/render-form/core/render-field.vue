@@ -1,4 +1,5 @@
 <script>
+import clonedeep from "lodash.clonedeep";
 import { getPropByPath } from "./utils";
 export default {
   name: "render-field",
@@ -22,6 +23,7 @@ export default {
       const fieldOption = getFieldOptionByProp(prop);
       console.log("fieldOption", fieldOption, mainForm);
       const value = getPropByPath(formData, prop);
+      const props = clonedeep(fieldOption.props);
       return (
         <el-col span={fieldOption.span}>
           {fieldOption.comp === "slot-single" ? (
@@ -39,9 +41,12 @@ export default {
                   {...{
                     props: {
                       value,
+                      ...props,
                     },
+                    style: props.style,
                     attrs: {
-                      ...fieldOption.props,
+                      value,
+                      ...props,
                     },
                     on: {
                       input: (value) => {

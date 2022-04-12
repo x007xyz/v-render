@@ -18,12 +18,28 @@ export default {
               key: "key2",
               label: "显示字段1的值",
             },
+            {
+              key: "key3",
+              label: "字段2",
+            },
+            {
+              key: "key4",
+              type: "switch",
+              label: "控制字段2的disabled属性",
+            },
           ],
         },
       ],
       watcher: {
         key1(value, data) {
           data.key2 = "字段1的值是：" + value;
+        },
+        key4(value, data, updateField) {
+          updateField("key3", {
+            props: {
+              disabled: value,
+            },
+          });
         },
       },
     };

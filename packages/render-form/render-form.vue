@@ -102,8 +102,9 @@
 
 <script>
 import clonedeep from "lodash.clonedeep";
+import merge from "lodash.merge";
 import { getAllBlocks, getFieldOptions } from "./utils.js";
-import { hasPropByPath } from "./core/utils";
+import { hasPropByPath, getPropByPath } from "./core/utils";
 
 export default {
   name: "render-form",
@@ -194,13 +195,14 @@ export default {
       foldBlockList: [],
       // 浏览模式为single时，显示哪个block
       singleScanBlock: "",
-      // 更新field options的值，根据key匹配
-      updateField: {},
       formData: {},
       fieldOptions: [],
     };
   },
   watch: {
+    globalOptions() {
+      this.initFieldOptions();
+    },
     scanType: {
       handler(val) {
         if (val === "single") {
@@ -295,6 +297,15 @@ export default {
           );
         }
       });
+      // 初始化formData时，应该触发所有watcher
+      Object.keys(this.watcher).forEach((key) => {
+        this.watcher[key](
+          getPropByPath(this.formData, key),
+          this.formData,
+          this.updateFieldProp
+        );
+      });
+      // 初始化清除所有校验
       this.$nextTick(() => {
         this.$refs.form.clearValidate();
       });
@@ -307,6 +318,18 @@ export default {
         }
       });
     },
+    onWatcher(path) {
+      path = path.replace(/\[(\w+)\]/g, ".$1");
+      path = path.replace(/^\./, "");
+      let tempObj = this.formData;
+      const paths = path.split(".");
+      for (let i = 0; i < paths.length; i++) {
+        const key = paths[i];
+        this.watcher[key] &&
+          this.watcher[key](tempObj[key], this.formData, this.updateFieldProp);
+        tempObj = tempObj[key];
+      }
+    },
     updateValue(key, value) {
       if (typeof value === "string") {
         value = value.trim();
@@ -314,15 +337,18 @@ export default {
       console.log("updateValue", key, value);
       // 更新数据
       this.setPropByPath(this.formData, key, value);
-      this.$nextTick(() => {
-        this.watcher[key] &&
-          this.watcher[key](value, this.formData, (key, options) => {
-            this.$set(this.updateField, key, options);
-          });
-      });
+      // 触发监听方法
+      this.onWatcher(key);
     },
     updateFieldProp(key, options) {
-      this.$set(this.updateField, key, options);
+      const index = this.fieldOptions.findIndex((item) => item.key === key);
+      if (index > -1) {
+        this.$set(
+          this.fieldOptions,
+          index,
+          merge(this.fieldOptions[index], options)
+        );
+      }
     },
     // 更新
     foldBlock(block) {

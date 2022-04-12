@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     onInput(value) {
-      console.log(value);
+      console.log(value, this.$attrs);
       this.$emit("input", value * 100);
     },
   },

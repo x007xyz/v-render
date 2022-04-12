@@ -30,6 +30,11 @@ const routes = [
     component: () => import("../../examples/form/Rules.vue"),
   },
   {
+    path: "/form/watcher",
+    name: "Watcher",
+    component: () => import("../../examples/form/Watcher.vue"),
+  },
+  {
     path: "/form/config",
     name: "Config",
     component: () => import("../../examples/form/Config.vue"),

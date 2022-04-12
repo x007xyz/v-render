@@ -1,4 +1,5 @@
 import Vue from "vue";
+import dayjs from "dayjs";
 import App from "./App.vue";
 import router from "./router";
 import ElementUI from "element-ui";
@@ -12,16 +13,24 @@ Vue.use(ElementUI, {
   size: "small",
 });
 
-Vue.use(VRender, {
-  "custom-input": {
-    component: CustomInput,
-    handler(options) {
-      if (options.defaultValue === "") {
-        options.defaultValue = 0;
-      }
+Vue.use(
+  VRender,
+  {
+    "custom-input": {
+      component: CustomInput,
+      handler(options) {
+        if (options.defaultValue === "") {
+          options.defaultValue = 0;
+        }
+      },
     },
   },
-});
+  {
+    formatDateTime(val) {
+      return dayjs(val).format("YYYY-MM-DD HH:mm:ss");
+    },
+  }
+);
 
 new Vue({
   router,
