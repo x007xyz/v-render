@@ -53,46 +53,12 @@
           <div class="flex-box">
             <RenderField
               v-for="rowItem in block.children"
-              :key="rowItem.prop"
-              :prop="rowItem.prop"
-              :comp="rowItem.comp"
+              :key="rowItem.key"
+              :prop="rowItem.key"
+              :comp="rowItem.widget"
             >
             </RenderField>
-            <!-- <el-col
-              v-for="rowItem in block.children"
-              v-show="!rowItem.hidden"
-              :key="rowItem.key"
-              :span="rowItem.span"
-              :style="rowItem.style || {}"
-            >
-              <div v-if="rowItem.type === 'slot-single'">
-                <slot :name="rowItem.name"></slot>
-              </div>
-              <el-form-item
-                v-else
-                :style="rowItem.style"
-                :class="rowItem.class"
-                :rules="rowItem.rules"
-                :label="rowItem.label ? rowItem.label + ':' : ' '"
-                :prop="rowItem.key"
-              >
-                <div v-if="rowItem.type === 'slot'">
-                  <slot :name="rowItem.name" v-bind="rowItem"></slot>
-                </div>
-                <component
-                  v-else
-                  :is="rowItem.type"
-                  :key="rowItem.key"
-                  :value="getPropByPath(formData, rowItem.key)"
-                  @input="updateValue(rowItem.key, $event)"
-                  :watcher="watcherChildFormObj[rowItem.key]"
-                  style="width: 100%"
-                  v-bind="rowItem.props"
-                ></component>
-              </el-form-item>
-            </el-col> -->
           </div>
-          <!-- <el-divider v-if="field.divider" /> -->
         </div>
       </div>
       <!-- 表头加粗文字开始 -->
@@ -103,8 +69,13 @@
 <script>
 import clonedeep from "lodash.clonedeep";
 import merge from "lodash.merge";
-import { getAllBlocks, getFieldOptions } from "./utils.js";
-import { hasPropByPath, getPropByPath } from "./core/utils";
+import get from "lodash.get";
+import {
+  getAllBlocks,
+  generateFieldOption,
+  generateFormDate,
+} from "./utils.js";
+import { hasPropByPath } from "./core/utils";
 
 export default {
   name: "render-form",
@@ -196,7 +167,7 @@ export default {
       // 浏览模式为single时，显示哪个block
       singleScanBlock: "",
       formData: {},
-      fieldOptions: [],
+      fieldOption: {},
     };
   },
   watch: {
@@ -246,9 +217,6 @@ export default {
     },
   },
   methods: {
-    getFieldOptionByProp(prop) {
-      return this.fieldOptions.find((item) => item.key === prop);
-    },
     setPropByPath(obj, path, value, defaultValue = "") {
       // 处理路径
       path = path.replace(/\[(\w+)\]/g, ".$1");
@@ -274,33 +242,19 @@ export default {
     },
     // 初始化字段配置项
     initFieldOptions() {
-      const fieldOptions = getFieldOptions(
-        this.fields.reduce((res, { children }) => {
-          return res.concat(children);
-        }, []),
-        this.globalOptions
+      this.$set(
+        this,
+        "fieldOption",
+        generateFieldOption(this.fields, this.globalOptions)
       );
-      this.$set(this, "fieldOptions", fieldOptions);
     },
     // 根据fields和data的值，初始化 formData 的值
     initFormData() {
-      this.$set(this, "formData", {});
-      // 通过fields初始化formData的key
-      this.fieldOptions.forEach((field) => {
-        // 如果key已经在data中，就取data中的值
-        if (field.key) {
-          this.setPropByPath(
-            this.formData,
-            field.key,
-            this.formData[field.key],
-            field.defaultValue
-          );
-        }
-      });
+      this.$set(this, "formData", generateFormDate(this.fieldOption));
       // 初始化formData时，应该触发所有watcher
       Object.keys(this.watcher).forEach((key) => {
         this.watcher[key](
-          getPropByPath(this.formData, key),
+          get(this.formData, key),
           this.formData,
           this.updateFieldProp
         );
@@ -334,7 +288,6 @@ export default {
       if (typeof value === "string") {
         value = value.trim();
       }
-      console.log("updateValue", key, value);
       // 更新数据
       this.setPropByPath(this.formData, key, value);
       // 触发监听方法

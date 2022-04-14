@@ -1,6 +1,5 @@
 <script>
-import clonedeep from "lodash.clonedeep";
-import { getPropByPath } from "./utils";
+import { toCompProps, getFieldProps } from "./utils";
 export default {
   name: "render-field",
   functional: true,
@@ -9,52 +8,30 @@ export default {
     // 字段的prop，会根据prop的值来获取相关的属性
     prop: String,
   },
-  render(h, { props, injections }) {
+  render(h, { props, parent, injections }) {
     const { prop } = props;
     if (prop) {
       // 通过prop获取字段的属性
-      const mainForm = injections.mainForm;
-      const {
-        formData,
-        updateValue,
-        getFieldOptionByProp,
-        $slots: slots,
-      } = mainForm;
-      const fieldOption = getFieldOptionByProp(prop);
-      console.log("fieldOption", fieldOption, mainForm);
-      const value = getPropByPath(formData, prop);
-      const props = clonedeep(fieldOption.props);
+      const { fieldOption } = parent;
+      // 获取主表单的slots
+      const { $slots: slots } = injections["mainForm"];
+      const fieldProps = getFieldProps(fieldOption, prop);
+      const props = toCompProps(prop, parent);
+      if (fieldProps.hidden) return;
       return (
-        <el-col span={fieldOption.span}>
-          {fieldOption.comp === "slot-single" ? (
+        <el-col span={fieldProps.span}>
+          {fieldProps.widget === "slot-single" ? (
             slots[prop]
           ) : (
             <el-form-item
-              rules={fieldOption.rules}
-              label={fieldOption.label ? fieldOption.label + ":" : " "}
+              rules={fieldProps.rules}
+              label={fieldProps.label ? fieldProps.label + ":" : " "}
               prop={prop}
             >
-              {fieldOption.comp === "slot" ? (
+              {fieldProps.widget === "slot" ? (
                 slots[prop]
               ) : (
-                <fieldOption.comp
-                  {...{
-                    props: {
-                      value,
-                      ...props,
-                    },
-                    style: props.style,
-                    attrs: {
-                      value,
-                      ...props,
-                    },
-                    on: {
-                      input: (value) => {
-                        updateValue(prop, value);
-                      },
-                    },
-                  }}
-                ></fieldOption.comp>
+                <fieldProps.widget {...props}></fieldProps.widget>
               )}
             </el-form-item>
           )}
@@ -65,4 +42,3 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped></style>

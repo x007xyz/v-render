@@ -1,67 +1,46 @@
 <template>
   <div class="child-form-container">
-    <div class="child-form" v-for="(data, index) in value" :key="index">
-      <div class="child-form-head">
-        <span>{{ headerLabel }}{{ index + 1 }}</span>
-        <el-button type="text" @click="onDelete(index)">删除</el-button>
+    <el-form
+      ref="form"
+      :model="formData"
+      :label-width="labelWidth"
+      :label-position="labelPosition"
+    >
+      <div class="child-form" v-for="(data, index) in value" :key="index">
+        <div class="child-form-head">
+          <span>{{ headerLabel }}{{ index + 1 }}</span>
+          <el-button type="text" @click="onDelete(index)">删除</el-button>
+        </div>
+        <div class="child-form-body">
+          <RenderField
+            v-for="(_, key) in fieldOption[index]"
+            :key="key"
+            :prop="`${index}.${key}`"
+          >
+          </RenderField>
+        </div>
       </div>
-      <div class="child-form-body">
-        <el-form
-          ref="form"
-          :model="value[index]"
-          :label-width="labelWidth"
-          :label-position="labelPosition"
-        >
-          <template v-for="(row, rowIndex) in curFields">
-            <el-row :gutter="20" :key="rowIndex" class="block-content">
-              <template v-for="rowItem in row">
-                <div :key="rowItem.key">
-                  <el-col
-                    :span="rowItem.span"
-                    :key="rowItem.key"
-                    :style="rowItem.style || {}"
-                  >
-                    <el-form-item
-                      v-if="rowItem.type !== 'child-form'"
-                      :style="rowItem.style"
-                      :class="rowItem.class"
-                      :rules="rowItem.rules"
-                      :label="rowItem.label"
-                      :prop="rowItem.key"
-                    >
-                      <component
-                        :is="rowItem.type"
-                        :key="rowItem.key"
-                        :value="data[rowItem.key]"
-                        @input="updateValue(index, rowItem.key, $event)"
-                        v-bind="rowItem.props"
-                      ></component>
-                    </el-form-item>
-                  </el-col>
-                </div>
-              </template>
-            </el-row>
-          </template>
-        </el-form>
-      </div>
-    </div>
 
-    <div class="child-form-add-btn" @click="addChildForm">
-      {{ addBtnLabel }}
-    </div>
+      <div class="child-form-add-btn" @click="addChildForm">
+        {{ addBtnLabel }}
+      </div>
+    </el-form>
   </div>
 </template>
 
 <script>
-import clonedeep from "lodash.clonedeep";
-import { getFieldRow, getAllFields } from "../render-form/utils.js";
+import { generateFormDate } from "../render-form/utils";
 export default {
   name: "ChildForm",
   components: {
-    NormalInput: () => import("../normal-input"),
+    RenderField: () => import("../render-form/core/render-field.vue"),
   },
   inject: ["mainForm"],
   props: {
+    // 组件的key路径
+    path: {
+      type: String,
+    },
     watcher: {
       type: Object,
       default() {
@@ -102,31 +81,23 @@ export default {
       },
     },
   },
-  computed: {
-    // 完整的fields，合并了默认值，全局设置
-    allFields() {
-      return getAllFields(clonedeep(this.fields), {
-        allDisabled: this.disabled,
-        textModel: this.textModel,
-      });
-    },
-    curFields() {
-      const fields = this.allFields.filter((field) => !field.hidden);
-      return getFieldRow(fields);
-    },
+  data() {
+    return {};
   },
-  watch: {
-    value: {
-      handler(data) {
-        if (!data || data.length === 0) {
-          const res = {};
-          this.allFields.forEach((field) => {
-            res[field.key] = field.defaultValue;
-          });
-          this.$emit("input", [res]);
-        }
-      },
-      immediate: true,
+  computed: {
+    properties() {
+      return this.$attrs.items || this.$attrs.properties;
+    },
+    formData() {
+      return this.value;
+    },
+    fieldOption() {
+      if (this.$attrs.items) {
+        return this.value.map(() => {
+          return { ...this.properties };
+        });
+      }
+      return { ...this.properties };
     },
   },
   methods: {
@@ -134,32 +105,25 @@ export default {
       this.value.splice(index, 1);
       this.$emit("input", this.value);
     },
-    updateValue(index, key, value) {
-      console.log(key);
+    updateValue(key, value) {
       if (typeof value === "string") {
         value = value.trim();
       }
-      this.$set(this.value[index], key, value);
-      this.watcher[key] && this.watcher[key](value, this.value[index]);
-      this.$emit("input", this.value);
+      console.log("updateValue", key, value);
+      // 一般组件通过input事件来更新数据，这里通过设置值来更新数据
+      // 通过updateValue触发数据更新，会触发watcher的相关方法
+      // 如果通过input更新，只会触发组件key的监听事件
+      this.mainForm.updateValue(`${this.path}.${key}`, value);
     },
     addChildForm() {
-      this.validateAllForm().then((valid) => {
+      this.$refs.form.validate().then((valid) => {
         if (valid) {
-          const res = {};
-          this.allFields.forEach((field) => {
-            res[field.key] = field.defaultValue;
-          });
-          this.$emit("input", this.value.concat(res));
+          this.$emit(
+            "input",
+            this.value.concat(generateFormDate(this.properties))
+          );
         }
       });
-    },
-    validateAllForm() {
-      return Promise.all(this.$refs.form.map((ref) => ref.validate())).then(
-        (res) => {
-          return res.every((item) => item);
-        }
-      );
     },
   },
   mounted() {

@@ -24,6 +24,7 @@
     "dayjs": "^1.10.7",
     "element-ui": "^2.15.6",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"

@@ -26,53 +26,54 @@ export default {
     Vue.component("date-picker", DatePicker);
     // 注册元素配置处理方法
     registerHandler("input", (options) => {
-      options.type = "normal-input";
+      options.widget = "normal-input";
     });
     registerHandler("number", (options) => {
-      options.type = "number-input";
+      options.widget = "number-input";
+      // 不能设置为number类型，否则如1,000这种无法展示
+      // options.type = "number";
     });
     registerHandler("checkbox", (options) => {
-      options.type = "checkbox-group";
+      options.widget = "checkbox-group";
+      options.type = "array";
       if (options.defaultValue === "") {
         options.defaultValue = [];
       }
     });
     registerHandler("radio", (options) => {
-      options.type = "radio-group";
+      options.widget = "radio-group";
     });
     registerHandler("select", (options) => {
-      options.type = "normal-select";
+      options.widget = "normal-select";
     });
     registerHandler("switch", (options) => {
-      options.type = "normal-switch";
+      options.widget = "normal-switch";
       if (options.defaultValue === "") {
         options.defaultValue = false;
       }
     });
     registerHandler("date", (options) => {
-      options.type = "date-picker";
+      options.widget = "date-picker";
     });
 
     Vue.component("dict-select", DictSelect);
 
     registerHandler("dict", (options) => {
-      options.type = "dict-select";
+      options.widget = "dict-select";
     });
 
     Vue.component("search-select", SearchSelect);
 
     registerHandler("search", (options) => {
-      options.type = "search-select";
+      options.widget = "search-select";
     });
 
     Vue.component("child-form", ChildForm);
 
     registerHandler("form", (options) => {
-      options.type = "child-form";
+      options.widget = "child-form";
+      options.type = "array";
       options.span = 24;
-      if (options.defaultValue === "") {
-        options.defaultValue = [];
-      }
     });
 
     registerHandler("slot-single", (options) => {
@@ -82,7 +83,7 @@ export default {
     Vue.component("table-select", TableSelect);
 
     registerHandler("table", (options) => {
-      options.type = "table-select";
+      options.widget = "table-select";
       options.span = 24;
       if (options.defaultValue === "") {
         options.defaultValue = [];

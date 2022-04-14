@@ -28,9 +28,9 @@ export default {
           // 子表单只能监听整个表单的数据变化，更精确的变化可以直接对比前后的顺序
           data.name = `子表单长度：${value.length}`;
         },
-        "group.$.key01"(value, data) {
-          data.key02 = value.length;
-        },
+        // "group.$.key01"(value, data) {
+        //   data.key02 = value.length;
+        // },
       },
       fields: [
         {
@@ -54,6 +54,23 @@ export default {
                 {
                   key: "key02",
                   label: "输入框的字符长度",
+                },
+                {
+                  type: "form",
+                  key: "group",
+                  label: "子表单",
+                  headerLabel: "子表单",
+                  fields: [
+                    {
+                      key: "key01",
+                      label: "子表单的输入框",
+                      rules: [{ required: true, message: "必填项" }],
+                    },
+                    {
+                      key: "key02",
+                      label: "输入框的字符长度",
+                    },
+                  ],
                 },
               ],
             },

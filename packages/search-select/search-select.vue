@@ -1,17 +1,3 @@
-<template>
-  <div>
-    <div class="text-model" v-if="textModel">{{ showValue }}</div>
-    <el-select v-else :value="value" v-bind="attrs" v-on="listeners">
-      <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      >
-      </el-option>
-    </el-select>
-  </div>
-</template>
 <script>
 /**
  * canEmpty 查询条件为空时，是否进行查询
@@ -105,6 +91,23 @@ export default {
           });
       }
     },
+  },
+  render() {
+    if (this.textModel) {
+      return <div className="text-model">{this.showValue}</div>;
+    }
+    return (
+      <el-select
+        {...{ props: this.attrs, on: this.listeners }}
+        value={this.value}
+      >
+        {this.options.map(({ value, label }) => {
+          return (
+            <el-option key={value} value={value} label={label}></el-option>
+          );
+        })}
+      </el-select>
+    );
   },
 };
 </script>
