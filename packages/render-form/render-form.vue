@@ -307,6 +307,16 @@ export default {
           });
         }
       });
+      // 执行所有watcher
+      Object.keys(this.watcher).forEach((key) => {
+        this.watcher[key](
+          this.getPropByPath(this.formData, key),
+          this.formData,
+          (key, options) => {
+            this.$set(this.updateField, key, options);
+          }
+        );
+      });
       this.$nextTick(() => {
         this.$refs.form.clearValidate();
       });

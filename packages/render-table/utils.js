@@ -50,7 +50,8 @@ export const getColumnAttr = (schema) => {
       if (typeof schema[key] === "string") {
         const prop = schema.prop;
         const fnName = schema[key];
-        attr[key] = (row) => formatters[fnName](row[prop], row);
+        attr[key] = (row, column, value) =>
+          formatters[fnName](value || row[prop], row);
       } else {
         attr[key] = schema[key];
       }

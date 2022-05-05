@@ -35,6 +35,11 @@ const routes = [
     component: () => import("../../examples/form/Config.vue"),
   },
   {
+    path: "/form/watcher",
+    name: "Watcher",
+    component: () => import("../../examples/form/Watcher.vue"),
+  },
+  {
     path: "/comp/date",
     name: "Date",
     component: () => import("../../examples/components/Date.vue"),

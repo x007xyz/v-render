@@ -12,6 +12,8 @@
     -
     <router-link to="/form/config">配置项</router-link>
     -
+    <router-link to="/form/watcher">Watcher</router-link>
+    -
     <router-link to="/comp/input">输入框</router-link>
     -
     <router-link to="/comp/radio">单选框</router-link>
