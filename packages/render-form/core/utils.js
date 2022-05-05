@@ -15,11 +15,17 @@ import get from "lodash.get";
 //     throw new Error(`获取通过prop获取的值失败，请检查路径${path}是否正确`);
 //   }
 // };
-
+// 获取字段的相关属性
 export const getFieldProps = (fieldOption, key) => {
   const { span, widget, rules, label, hidden, type } = get(fieldOption, key);
   return { span, widget, rules, label, hidden, type };
 };
+/**
+ * 获取组件的相关属性
+ * @param {*} fieldOption
+ * @param {*} key
+ * @returns
+ */
 export const getCompProps = (fieldOption, key) => {
   // eslint-disable-next-line no-unused-vars
   const { span, widget, rules, label, hidden, type, ...other } = get(

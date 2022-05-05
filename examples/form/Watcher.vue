@@ -31,10 +31,10 @@ export default {
         },
       ],
       watcher: {
-        key1(value, data) {
-          data.key2 = "字段1的值是：" + value;
+        key1({ value, updateValue }) {
+          updateValue("key2", "字段1的值是：" + value);
         },
-        key4(value, data, updateField) {
+        key4({ value, updateField }) {
           updateField("key3", {
             props: {
               disabled: value,

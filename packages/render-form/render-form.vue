@@ -253,11 +253,13 @@ export default {
       this.$set(this, "formData", generateFormDate(this.fieldOption));
       // 初始化formData时，应该触发所有watcher
       Object.keys(this.watcher).forEach((key) => {
-        this.watcher[key](
-          get(this.formData, key),
-          this.formData,
-          this.updateFieldProp
-        );
+        this.watcher[key]({
+          key,
+          value: get(this.formData, key),
+          formData: this.formData,
+          updateValue: this.updateValue,
+          updateField: this.updateField,
+        });
       });
       // 初始化清除所有校验
       this.$nextTick(() => {
@@ -273,16 +275,18 @@ export default {
       });
     },
     onWatcher(path) {
-      path = path.replace(/\[(\w+)\]/g, ".$1");
-      path = path.replace(/^\./, "");
-      let tempObj = this.formData;
-      const paths = path.split(".");
-      for (let i = 0; i < paths.length; i++) {
-        const key = paths[i];
-        this.watcher[key] &&
-          this.watcher[key](tempObj[key], this.formData, this.updateFieldProp);
-        tempObj = tempObj[key];
-      }
+      Object.keys(this.watcher).forEach((key) => {
+        // 路径匹配则触发watcher
+        if (path.indexOf(key) === 0) {
+          this.watcher[key]({
+            key,
+            value: get(this.formData, key),
+            formData: this.formData,
+            updateValue: this.updateValue,
+            updateField: this.updateField,
+          });
+        }
+      });
     },
     updateValue(key, value) {
       if (typeof value === "string") {
@@ -293,15 +297,8 @@ export default {
       // 触发监听方法
       this.onWatcher(key);
     },
-    updateFieldProp(key, options) {
-      const index = this.fieldOptions.findIndex((item) => item.key === key);
-      if (index > -1) {
-        this.$set(
-          this.fieldOptions,
-          index,
-          merge(this.fieldOptions[index], options)
-        );
-      }
+    updateField(key, option) {
+      this.fieldOption[key] = merge(this.fieldOption[key], option);
     },
     // 更新
     foldBlock(block) {
