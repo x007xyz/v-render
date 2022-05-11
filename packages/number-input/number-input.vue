@@ -132,6 +132,9 @@ export default {
     this.$watch("value", (newValue) => {
       this.setInnerValue(newValue);
     });
+    this.$watch("unit", () => {
+      this.setInnerValue(this.value);
+    });
   },
 };
 </script>
