@@ -307,25 +307,30 @@ export default {
           });
         }
       });
-      // 执行所有watcher
-      Object.keys(this.watcher).forEach((key) => {
-        this.watcher[key](
-          this.getPropByPath(this.formData, key),
-          this.formData,
-          (key, options) => {
-            this.$set(this.updateField, key, options);
-          }
-        );
-      });
       this.$nextTick(() => {
+        // 执行所有watcher
+        Object.keys(this.watcher).forEach((key) => {
+          this.watcher[key](
+            this.getPropByPath(this.formData, key),
+            this.formData,
+            (key, options) => {
+              this.$set(this.updateField, key, options);
+            }
+          );
+        });
         this.$refs.form.clearValidate();
       });
     },
     // 更新数据
-    updateFormData(data) {
+    updateFormData(data, parentPath = "") {
       Object.keys(data).forEach((key) => {
-        if (this.hasPropByPath(this.formData, key)) {
-          this.updateValue(key, data[key]);
+        const path = parentPath ? `${parentPath}.${key}` : key;
+        if (this.hasPropByPath(this.formData, path)) {
+          if (typeof data[key] === "object") {
+            this.updateFormData(data[key], path);
+          } else {
+            this.updateValue(path, data[key]);
+          }
         }
       });
     },
