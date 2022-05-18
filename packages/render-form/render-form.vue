@@ -326,7 +326,7 @@ export default {
       Object.keys(data).forEach((key) => {
         const path = parentPath ? `${parentPath}.${key}` : key;
         if (this.hasPropByPath(this.formData, path)) {
-          if (typeof data[key] === "object") {
+          if (typeof data[key] === "object" && !Array.isArray(data[key])) {
             this.updateFormData(data[key], path);
           } else {
             this.updateValue(path, data[key]);
