@@ -15,7 +15,7 @@ export default {
     NormalSelect: () => import("../normal-select"),
   },
   props: {
-    value: [String, Number],
+    value: [String, Number, Array],
     dict: {
       type: Function,
       default() {

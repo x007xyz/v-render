@@ -15,7 +15,7 @@ export default {
   name: "normal-select",
   inheritAttrs: false,
   props: {
-    value: [String, Number],
+    value: [String, Number, Array],
     options: {
       type: Array,
       default() {

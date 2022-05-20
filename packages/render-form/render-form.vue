@@ -308,15 +308,16 @@ export default {
         }
       });
       this.$nextTick(() => {
-        // 执行所有watcher
+        // 执行所有watcher,存在$则不执行
         Object.keys(this.watcher).forEach((key) => {
-          this.watcher[key](
-            this.getPropByPath(this.formData, key),
-            this.formData,
-            (key, options) => {
-              this.$set(this.updateField, key, options);
-            }
-          );
+          !/\$/.test(key) &&
+            this.watcher[key](
+              this.getPropByPath(this.formData, key),
+              this.formData,
+              (key, options) => {
+                this.$set(this.updateField, key, options);
+              }
+            );
         });
         this.$refs.form.clearValidate();
       });
@@ -326,7 +327,7 @@ export default {
       Object.keys(data).forEach((key) => {
         const path = parentPath ? `${parentPath}.${key}` : key;
         if (this.hasPropByPath(this.formData, path)) {
-          if (typeof data[key] === "object" && !Array.isArray(data[key])) {
+          if (Object.prototype.toString.call(data[key]) === "[object Object]") {
             this.updateFormData(data[key], path);
           } else {
             this.updateValue(path, data[key]);
