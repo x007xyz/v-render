@@ -102,11 +102,17 @@ export const getAllFields = (fields, globalOption = {}, updateField = {}) => {
       nextRowFirst,
       currentRowLast,
       hidden,
+      placeholder,
       props,
       ...other
     } = fieldOptions;
     return {
-      props: { ...other, ...props, style: { width: size } },
+      props: {
+        ...other,
+        ...props,
+        placeholder: placeholder || `请输入${label}`,
+        style: { width: size },
+      },
       defaultValue,
       type,
       span,

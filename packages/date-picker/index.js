@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
 import DatePicker from "./date-picker.vue";
+import { formatDate } from "element-ui/lib/utils/date-util";
 export default {
   functional: true,
   props: {
@@ -7,20 +7,27 @@ export default {
   },
   render(h, context) {
     if (context.props.textModel) {
-      let { value, type = "date" } = context.data.attrs;
+      let {
+        value,
+        type = "date",
+        format,
+        "range-separator": separator,
+      } = context.data.attrs;
+      console.log("context", context);
       if (value) {
-        let format = "YYYY-MM-DD";
-        if (type.indexOf("datetime") > -1) {
-          // 日期时间类型，格式化为YYYY-MM-DD HH:mm:ss
-          format = "YYYY-MM-DD HH:mm:ss";
-        }
+        format =
+          format ||
+          (type.indexOf("datetime") > -1
+            ? "yyyy-MM-dd HH:mm:ss"
+            : "yyyy-MM-dd");
         if (type.indexOf("range") > 1) {
           // type 包含range，value应该是一个数组类型
           value =
-            (value[0] ? dayjs(value[0]).format(format) : "") +
-            (value[1] ? dayjs(value[1]).format(format) : "");
+            (value[0] ? formatDate(value[0], format) : "") +
+            (separator || "-") +
+            (value[1] ? formatDate(value[1], format) : "");
         } else {
-          value = dayjs(value).format(format);
+          value = formatDate(value, format);
         }
       }
       return <div className="text-model">{value || "-"}</div>;

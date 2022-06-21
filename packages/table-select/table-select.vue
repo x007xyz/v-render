@@ -116,6 +116,7 @@ export default {
       }
     },
     openTable() {
+      console.log("openTable");
       this.$refs.dialog.show(this.list);
     },
     delItem(row) {
