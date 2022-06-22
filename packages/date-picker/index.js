@@ -2,6 +2,7 @@ import DatePicker from "./date-picker.vue";
 import { formatDate, getWeekNumber } from "element-ui/lib/utils/date-util";
 
 const formatDateWeek = (value, format) => {
+  value = new Date(value);
   let week = getWeekNumber(value);
   let month = value.getMonth();
   const trueDate = new Date(value);
