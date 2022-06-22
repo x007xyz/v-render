@@ -23,7 +23,8 @@ export default {
               key: "key1",
               label: "日期",
               props: {
-                format: "yyyy年MM月dd日",
+                type: "week",
+                format: "yyyy年WW周",
               },
             },
             {

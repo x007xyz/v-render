@@ -1,5 +1,21 @@
 import DatePicker from "./date-picker.vue";
-import { formatDate } from "element-ui/lib/utils/date-util";
+import { formatDate, getWeekNumber } from "element-ui/lib/utils/date-util";
+
+const formatDateWeek = (value, format) => {
+  let week = getWeekNumber(value);
+  let month = value.getMonth();
+  const trueDate = new Date(value);
+  if (week === 1 && month === 11) {
+    trueDate.setHours(0, 0, 0, 0);
+    trueDate.setDate(trueDate.getDate() + 3 - ((trueDate.getDay() + 6) % 7));
+  }
+  let date = formatDate(trueDate, format);
+
+  date = /WW/.test(date)
+    ? date.replace(/WW/, week < 10 ? "0" + week : week)
+    : date.replace(/W/, week);
+  return date;
+};
 export default {
   functional: true,
   props: {
@@ -13,14 +29,15 @@ export default {
         format,
         "range-separator": separator,
       } = context.data.attrs;
-      console.log("context", context);
       if (value) {
         format =
           format ||
           (type.indexOf("datetime") > -1
             ? "yyyy-MM-dd HH:mm:ss"
             : "yyyy-MM-dd");
-        if (type.indexOf("range") > 1) {
+        if (type === "week") {
+          value = formatDateWeek(value, format);
+        } else if (type.indexOf("range") > 1) {
           // type 包含range，value应该是一个数组类型
           value =
             (value[0] ? formatDate(value[0], format) : "") +

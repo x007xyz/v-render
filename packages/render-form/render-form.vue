@@ -339,13 +339,19 @@ export default {
       if (typeof value === "string") {
         value = value.trim();
       }
+      const oldVal = this.getPropByPath(this.formData, key);
       // 更新数据
       this.setPropByPath(this.formData, key, value);
       this.$nextTick(() => {
         this.watcher[key] &&
-          this.watcher[key](value, this.formData, (key, options) => {
-            this.$set(this.updateField, key, options);
-          });
+          this.watcher[key](
+            value,
+            this.formData,
+            (key, options) => {
+              this.$set(this.updateField, key, options);
+            },
+            oldVal
+          );
       });
     },
     updateFieldProp(key, options) {
