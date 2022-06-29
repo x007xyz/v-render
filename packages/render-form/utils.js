@@ -1,3 +1,36 @@
+export const isObject = (val) => {
+  return Object.prototype.toString.call(val) === "[object Object]";
+};
+
+export const isFunction = (val) => {
+  return Object.prototype.toString.call(val) === "[object Function]";
+};
+
+export const hasPropByPath = (obj, path) => {
+  // 处理路径
+  path = path.replace(/\[(\w+)\]/g, ".$1");
+  path = path.replace(/^\./, "");
+  const paths = path.split(".");
+  let tempObj = obj;
+  return paths.every((key) => {
+    if (tempObj && key in tempObj) {
+      tempObj = tempObj[key];
+      return true;
+    }
+  });
+};
+export const getPropByPath = (obj, path, defaultValue) => {
+  // 处理路径
+  path = path.replace(/\[(\w+)\]/g, ".$1");
+  path = path.replace(/^\./, "");
+  const paths = path.split(".");
+  let current = obj;
+  while (paths.length > 0 && current) {
+    current = current[paths.shift()];
+  }
+  return current === undefined ? defaultValue : current;
+};
+
 class HandleField {
   handler = {};
   register(key, option) {

@@ -95,7 +95,14 @@
 
 <script>
 import clonedeep from "lodash.clonedeep";
-import { getFieldRow, getAllBlocks } from "./utils.js";
+import {
+  getFieldRow,
+  getAllBlocks,
+  isObject,
+  isFunction,
+  hasPropByPath,
+  getPropByPath,
+} from "./utils.js";
 
 export default {
   name: "render-form",
@@ -245,31 +252,8 @@ export default {
     },
   },
   methods: {
-    hasPropByPath(obj, path) {
-      // 处理路径
-      path = path.replace(/\[(\w+)\]/g, ".$1");
-      path = path.replace(/^\./, "");
-      const paths = path.split(".");
-      let tempObj = obj;
-      return paths.every((key) => {
-        if (tempObj && key in tempObj) {
-          tempObj = tempObj[key];
-          return true;
-        }
-      });
-    },
-    getPropByPath(obj, path) {
-      // 处理路径
-      path = path.replace(/\[(\w+)\]/g, ".$1");
-      path = path.replace(/^\./, "");
-      const paths = path.split(".");
-      let current = obj;
-      paths.forEach((p) => {
-        current = current[p];
-      });
-      return current;
-    },
-    setPropByPath(obj, path, value, defaultValue = "") {
+    getPropByPath,
+    setPropByPath(obj, path, value) {
       // 处理路径
       path = path.replace(/\[(\w+)\]/g, ".$1");
       path = path.replace(/^\./, "");
@@ -282,14 +266,22 @@ export default {
         }
         tempObj = tempObj[paths[i]];
       }
-      if (tempObj[key] === undefined) {
-        this.$set(tempObj, key, defaultValue);
-      } else {
-        this.$set(tempObj, key, value);
+      this.$set(tempObj, key, value);
+    },
+    triggerWatcher(key) {
+      const watcherItem = this.watcher[key];
+      if (watcherItem) {
+        (isFunction(watcherItem) ? watcherItem : watcherItem.handler)(
+          getPropByPath(this.formData, key),
+          this.formData,
+          (key, options) => {
+            this.$set(this.updateField, key, options);
+          }
+        );
       }
     },
     // 根据fields和data的值，初始化 formData 的值
-    initFormData() {
+    initFormData(data = {}) {
       this.$set(this, "formData", {});
       // 通过fields初始化formData的key
       this.allFields.forEach((fields) => {
@@ -300,24 +292,22 @@ export default {
               this.setPropByPath(
                 this.formData,
                 field.key,
-                this.data[field.key],
-                field.defaultValue
+                getPropByPath(data, field.key, field.defaultValue)
               );
             }
           });
         }
       });
       this.$nextTick(() => {
-        // 执行所有watcher,存在$则不执行
+        // 执行所有watcher,存在$不执行,只有immmediate为true执行
         Object.keys(this.watcher).forEach((key) => {
-          !/\$/.test(key) &&
-            this.watcher[key](
-              this.getPropByPath(this.formData, key),
-              this.formData,
-              (key, options) => {
-                this.$set(this.updateField, key, options);
-              }
-            );
+          if (
+            !/\$/.test(key) &&
+            isObject(this.watcher[key]) &&
+            this.watcher[key].immediate
+          ) {
+            this.triggerWatcher(key);
+          }
         });
         this.$refs.form.clearValidate();
       });
@@ -326,8 +316,8 @@ export default {
     updateFormData(data, parentPath = "") {
       Object.keys(data).forEach((key) => {
         const path = parentPath ? `${parentPath}.${key}` : key;
-        if (this.hasPropByPath(this.formData, path)) {
-          if (Object.prototype.toString.call(data[key]) === "[object Object]") {
+        if (hasPropByPath(this.formData, path)) {
+          if (isObject(data[key])) {
             this.updateFormData(data[key], path);
           } else {
             this.updateValue(path, data[key]);
@@ -339,19 +329,10 @@ export default {
       if (typeof value === "string") {
         value = value.trim();
       }
-      const oldVal = this.getPropByPath(this.formData, key);
       // 更新数据
       this.setPropByPath(this.formData, key, value);
       this.$nextTick(() => {
-        this.watcher[key] &&
-          this.watcher[key](
-            value,
-            this.formData,
-            (key, options) => {
-              this.$set(this.updateField, key, options);
-            },
-            oldVal
-          );
+        this.triggerWatcher(key);
       });
     },
     updateFieldProp(key, options) {
