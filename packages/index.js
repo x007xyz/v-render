@@ -7,6 +7,7 @@ import RadioGroup from "./radio-group";
 import CheckboxGroup from "./checkbox-group";
 import NormalSwitch from "./normal-switch";
 import DatePicker from "./date-picker";
+import TimePicker from "./time-picker";
 
 import DictSelect from "./dict-select";
 import SearchSelect from "./search-select";
@@ -24,6 +25,7 @@ export default {
     Vue.component("checkbox-group", CheckboxGroup);
     Vue.component("normal-switch", NormalSwitch);
     Vue.component("date-picker", DatePicker);
+    Vue.component("time-picker", TimePicker);
     // 注册元素配置处理方法
     registerHandler("input", (options) => {
       options.type = "normal-input";
@@ -51,6 +53,10 @@ export default {
     });
     registerHandler("date", (options) => {
       options.type = "date-picker";
+    });
+
+    registerHandler("time", (options) => {
+      options.type = "time-picker";
     });
 
     Vue.component("dict-select", DictSelect);

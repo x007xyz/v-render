@@ -22,6 +22,8 @@
     -
     <router-link to="/comp/date">日期组件</router-link>
     -
+    <router-link to="/comp/time">时间组件</router-link>
+    -
     <router-link to="/comp/dict">字典下拉</router-link>
     -
     <router-link to="/comp/search">搜索下拉</router-link>

@@ -45,6 +45,11 @@ const routes = [
     component: () => import("../../examples/components/Date.vue"),
   },
   {
+    path: "/comp/time",
+    name: "Time",
+    component: () => import("../../examples/components/Time.vue"),
+  },
+  {
     path: "/comp/input",
     name: "Input",
     component: () => import("../../examples/components/Input.vue"),
