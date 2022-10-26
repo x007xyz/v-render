@@ -6,9 +6,17 @@ export default {
   },
   render(h, context) {
     if (context.props.textModel) {
-      let { value } = context.data.attrs;
+      let { value, activeValue, inactiveValue, activeText, inactiveText } =
+        context.data.attrs;
       if (typeof value === "boolean") {
-        value = value ? "是" : "否";
+        value = value ? activeText || "是" : inactiveText || "否";
+      } else if (activeValue || inactiveValue) {
+        if (activeValue === value) {
+          value = activeText || "是";
+        }
+        if (inactiveValue === value) {
+          value = inactiveText || "否";
+        }
       } else {
         value = "-";
       }

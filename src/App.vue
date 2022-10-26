@@ -16,6 +16,8 @@
     -
     <router-link to="/comp/input">输入框</router-link>
     -
+    <router-link to="/comp/switch">开关</router-link>
+    -
     <router-link to="/comp/radio">单选框</router-link>
     -
     <router-link to="/comp/checkbox">多选框</router-link>

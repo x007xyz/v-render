@@ -1,6 +1,6 @@
 {
   "name": "v-render2",
-  "version": "0.4.25",
+  "version": "0.4.26",
   "main": "./dist/index.umd.min.js",
   "files": [
     "dist/index.css",
