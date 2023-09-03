@@ -23,7 +23,7 @@ export default {
             {
               label: "活动名称",
               type: "input",
-              key: "activity.name",
+              key: "name",
             },
             {
               label: "活动区域",

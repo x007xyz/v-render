@@ -25,11 +25,11 @@ export default {
               label: "普通输入框",
               key: "input",
             },
-            {
-              label: "label标签无效",
-              name: "card",
-              type: "slot-single",
-            },
+            // {
+            //   label: "label标签无效",
+            //   name: "card",
+            //   type: "slot-single",
+            // },
             {
               label: "",
               type: "slot",

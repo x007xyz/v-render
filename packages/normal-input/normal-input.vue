@@ -11,7 +11,7 @@ import RenderItem from "../render-item/render-item.vue";
  * suffix: 默认为空，String、Function类型，后置符号
  */
 export default {
-  name: "number-input",
+  name: "normal-input",
   components: { RenderItem },
   inheritAttrs: false,
   props: {

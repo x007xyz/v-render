@@ -58,31 +58,11 @@
               :span="rowItem.span"
               :style="rowItem.style || {}"
             >
-              <div v-if="rowItem.type === 'slot-single'">
-                <slot :name="rowItem.name"></slot>
-              </div>
-              <el-form-item
-                v-else
-                :style="rowItem.style"
-                :class="rowItem.class"
-                :rules="rowItem.rules"
-                :label="rowItem.label ? rowItem.label + ':' : ' '"
-                :prop="rowItem.key"
-              >
-                <div v-if="rowItem.type === 'slot'">
-                  <slot :name="rowItem.name" v-bind="rowItem"></slot>
-                </div>
-                <component
-                  v-else
-                  :is="rowItem.type"
-                  :key="rowItem.key"
-                  :value="getPropByPath(formData, rowItem.key)"
-                  @input="updateValue(rowItem.key, $event)"
-                  :watcher="watcherChildFormObj[rowItem.key]"
-                  style="width: 100%"
-                  v-bind="rowItem.props"
-                ></component>
-              </el-form-item>
+              <Field
+                :key="rowItem.key"
+                :parentPath="path"
+                :schema="rowItem"
+              ></Field>
             </el-col>
           </div>
           <!-- <el-divider v-if="field.divider" /> -->
@@ -103,15 +83,23 @@ import {
   hasPropByPath,
   getPropByPath,
 } from "./utils.js";
+import Field from "../render-field";
 
 export default {
   name: "render-form",
+  components: {
+    Field,
+  },
   provide() {
     return {
-      mainForm: this,
+      root: this,
     };
   },
   props: {
+    path: {
+      type: String,
+      default: "",
+    },
     // watcher 监听数据变化
     // 只在表单修改数据时监听，直接修改formData的值时不触发
     watcher: {
@@ -252,6 +240,12 @@ export default {
     },
   },
   methods: {
+    getValueByPath(path) {
+      return this.formData[path];
+    },
+    setValueByPath(value, path) {
+      this.$set(this.formData, path, value);
+    },
     getPropByPath,
     setPropByPath(obj, path, value) {
       // 处理路径
