@@ -20,6 +20,7 @@ export default {
     // 全局注册元素组件
     Vue.component("normal-input", NormalInput);
     Vue.component("number-input", NumberInput);
+    Vue.component("InputNumber", NumberInput);
     Vue.component("normal-select", NormalSelect);
     Vue.component("radio-group", RadioGroup);
     Vue.component("checkbox-group", CheckboxGroup);

@@ -1,5 +1,6 @@
 <script>
-import RenderList from "../render-list/render-list.vue";
+import { getWidgetName } from "../../core/getWidgetName";
+// import RenderList from "../render-list/render-list.vue";
 export default {
   name: "render-item",
   functional: true,
@@ -10,63 +11,67 @@ export default {
   inject: ["root"],
   render(h, context) {
     const { schema } = context.props;
-    console.log("🚀 ~ file: render-field.vue:10 ~ render ~ context:", context);
+    console.log("🚀 ~ file: render-field.vue:13 ~ render ~ schema:", schema);
+
+    const widget = getWidgetName(schema);
+
+    console.log("🚀 ~ file: render-field.vue:18 ~ render ~ widget:", widget);
+
     const { rules = [], label, key } = context.props.schema;
 
-    const root = context.injections.root;
-    console.log("🚀 ~ file: render-field.vue:15 ~ render ~ root:", root);
-    const { type, props } = context.props.schema;
     const path = [context.props.parentPath, key].filter(Boolean).join(".");
-    const wrapper = () =>
-      h(
-        type,
+
+    const root = context.injections.root;
+
+    const { props } = context.props.schema;
+
+    const renderItem = () => {
+      return h(
+        "el-form-item",
         {
           props: {
-            value: root.getValueByPath(path),
-            ...props,
+            label,
+            prop: path,
+            rules,
           },
-          attrs: {
-            ...props,
-          },
-          on: {
-            input(e) {
-              root.setValueByPath(e, path);
+        },
+        [
+          h(
+            widget,
+            {
+              props: {
+                value: root.getValueByPath(path),
+                ...props,
+              },
+              attrs: {
+                ...props,
+              },
+              on: {
+                input(e) {
+                  root.setValueByPath(e, path);
+                },
+              },
             },
-          },
-        },
-        context.children
+            context.children
+          ),
+        ]
       );
+    };
 
-    function renderWidget() {
-      console.log(
-        "🚀 ~ file: render-field.vue:44 ~ renderWidget ~ type:",
-        type
-      );
-      if (type === "slot") {
-        return root.$scopedSlots[schema.name]();
-      } else if (type === "child-form") {
-        console.log("schema", schema);
-        return h(RenderList, {
-          props: {
-            parentPath: path,
-            schema: schema.props.fields,
-          },
-        });
-      } else {
-        return wrapper();
-      }
-    }
-    return h(
-      "el-form-item",
-      {
-        props: {
-          label,
-          prop: path,
-          rules,
-        },
-      },
-      [renderWidget()]
-    );
+    // const renderSlot = () => {
+    //   return root.$scopedSlots[schema.name]();
+    // };
+
+    // const renderList = () => {
+    //   return h(RenderList, {
+    //     props: {
+    //       parentPath: path,
+    //       schema: schema.props.fields,
+    //     },
+    //   });
+    // };
+
+    return renderItem();
   },
 };
 </script>

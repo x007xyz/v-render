@@ -22,8 +22,14 @@
       :label-width="labelWidth"
       :label-position="labelPosition"
     >
+      <Field
+        v-for="(property, key) in rootSchema.properties"
+        :key="key"
+        :path="key"
+        :schema="property"
+      ></Field>
       <!-- 区块级，每个 filed 是一个区块 -->
-      <div v-for="block in allFields" :key="block.label">
+      <!-- <div v-for="block in allFields" :key="block.label">
         <div
           :class="block.class"
           v-if="
@@ -65,25 +71,18 @@
               ></Field>
             </el-col>
           </div>
-          <!-- <el-divider v-if="field.divider" /> -->
         </div>
-      </div>
+      </div> -->
       <!-- 表头加粗文字开始 -->
     </el-form>
   </div>
 </template>
 
 <script>
-import clonedeep from "lodash.clonedeep";
-import {
-  getFieldRow,
-  getAllBlocks,
-  isObject,
-  isFunction,
-  hasPropByPath,
-  getPropByPath,
-} from "./utils.js";
-import Field from "../render-field";
+import { get, set } from "lodash-es";
+import Field from "./render-field";
+
+import { createDataSkeleton } from "../../core/genData4Schema";
 
 export default {
   name: "render-form",
@@ -164,6 +163,12 @@ export default {
         return [];
       },
     },
+    schema: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
     data: {
       type: Object,
       default() {
@@ -181,6 +186,7 @@ export default {
       // 更新field options的值，根据key匹配
       updateField: {},
       formData: {},
+      rootSchema: {},
     };
   },
   watch: {
@@ -195,195 +201,232 @@ export default {
       },
       immediate: true,
     },
+    schema: {
+      handler(val) {
+        this.setSchema(val);
+      },
+      immediate: true,
+    },
   },
   computed: {
     // 子表单监听方法
-    watcherChildFormObj() {
-      const res = {};
-      Object.keys(this.watcher).forEach((key) => {
-        const [childFormKey, fieldKey] = key.split(".$.");
-        if (childFormKey && fieldKey) {
-          if (res[childFormKey]) {
-            res[childFormKey][fieldKey] = this.watcher[key];
-          } else {
-            res[childFormKey] = { [fieldKey]: this.watcher[key] };
-          }
-        }
-      });
-      return res;
-    },
-    globalOptions() {
-      return {
-        borderForm: this.borderForm,
-        allDisabled: this.allDisabled,
-        textModel: this.textModel,
-        formItemCol: this.formItemCol,
-        formItemSize: this.formItemSize,
-      };
-    },
-    // 完整的fields，合并了默认值，全局设置
-    allFields() {
-      return getAllBlocks(
-        clonedeep(this.fields),
-        this.globalOptions,
-        this.updateField
-      );
-    },
-    curFields() {
-      return this.allFields.map((block) => {
-        // 对字段进行布局处理
-        // 对属性为hidden的字段进行过滤
-        // 需要将字段划分到每行
-        const fields = block.children.filter((field) => !field.hidden);
-        return { ...block, children: getFieldRow(fields) };
-      });
-    },
+    // watcherChildFormObj() {
+    //   const res = {};
+    //   Object.keys(this.watcher).forEach((key) => {
+    //     const [childFormKey, fieldKey] = key.split(".$.");
+    //     if (childFormKey && fieldKey) {
+    //       if (res[childFormKey]) {
+    //         res[childFormKey][fieldKey] = this.watcher[key];
+    //       } else {
+    //         res[childFormKey] = { [fieldKey]: this.watcher[key] };
+    //       }
+    //     }
+    //   });
+    //   return res;
+    // },
+    // globalOptions() {
+    //   return {
+    //     borderForm: this.borderForm,
+    //     allDisabled: this.allDisabled,
+    //     textModel: this.textModel,
+    //     formItemCol: this.formItemCol,
+    //     formItemSize: this.formItemSize,
+    //   };
+    // },
+    // // 完整的fields，合并了默认值，全局设置
+    // allFields() {
+    //   return getAllBlocks(
+    //     clonedeep(this.fields),
+    //     this.globalOptions,
+    //     this.updateField
+    //   );
+    // },
+    // curFields() {
+    //   return this.allFields.map((block) => {
+    //     // 对字段进行布局处理
+    //     // 对属性为hidden的字段进行过滤
+    //     // 需要将字段划分到每行
+    //     const fields = block.children.filter((field) => !field.hidden);
+    //     return { ...block, children: getFieldRow(fields) };
+    //   });
+    // },
   },
   methods: {
+    setSchema(schema) {
+      // 对schema进行处理，补全默认值
+      this.rootSchema = schema;
+      // 根据schema初始化formData，mode为update时，更新formData，否则重置formData
+      // this.genFormDataBySchema(schema, mode);
+      this.formData = createDataSkeleton(schema, this.formData);
+    },
     getValueByPath(path) {
-      return this.formData[path];
+      return get(this.formData, path);
     },
     setValueByPath(value, path) {
-      this.$set(this.formData, path, value);
-    },
-    getPropByPath,
-    setPropByPath(obj, path, value) {
+      set(this.formData, path, value);
       // 处理路径
-      path = path.replace(/\[(\w+)\]/g, ".$1");
-      path = path.replace(/^\./, "");
-      let tempObj = obj;
-      const paths = path.split(".");
-      const key = paths.pop();
-      for (let i = 0; i < paths.length; i++) {
-        if (tempObj[paths[i]] === undefined) {
-          this.$set(tempObj, paths[i], {});
-        }
-        tempObj = tempObj[paths[i]];
-      }
-      this.$set(tempObj, key, value);
+      // path = path.replace(/\[(\w+)\]/g, ".$1");
+      // path = path.replace(/^\./, "");
+      // const paths = path.split(".");
+      // console.log(
+      //   "🚀 ~ file: render-form.vue:276 ~ setValueByPath ~ paths:",
+      //   paths
+      // );
+      // const key = paths.pop();
+      // let tempObj = this.formData;
+      // for (let i = 0; i < paths.length; i++) {
+      //   if (tempObj[paths[i]] === undefined) {
+      //     this.$set(tempObj, paths[i], {});
+      //   }
+      //   tempObj = tempObj[paths[i]];
+      // }
+      // console.log(
+      //   "🚀 ~ file: render-form.vue:287 ~ setValueByPath ~ tempObj:",
+      //   tempObj
+      // );
+      // this.$set(tempObj, key, value);
     },
-    triggerWatcher(key) {
-      const watcherItem = this.watcher[key];
-      if (watcherItem) {
-        (isFunction(watcherItem) ? watcherItem : watcherItem.handler)(
-          getPropByPath(this.formData, key),
-          this.formData,
-          (key, options) => {
-            this.$set(this.updateField, key, options);
-          }
-        );
-      }
-    },
-    // 根据fields和data的值，初始化 formData 的值
-    initFormData(data = {}) {
-      this.$set(this, "formData", {});
-      // 通过fields初始化formData的key
-      this.allFields.forEach((fields) => {
-        if (fields.children && Array.isArray(fields.children)) {
-          fields.children.forEach((field) => {
-            // 如果key已经在data中，就取data中的值
-            if (field.key) {
-              this.setPropByPath(
-                this.formData,
-                field.key,
-                getPropByPath(data, field.key, field.defaultValue)
-              );
-            }
-          });
-        }
-      });
-      this.$nextTick(() => {
-        // 执行所有watcher,存在$不执行,只有immmediate为true执行
-        Object.keys(this.watcher).forEach((key) => {
-          if (
-            !/\$/.test(key) &&
-            isObject(this.watcher[key]) &&
-            this.watcher[key].immediate
-          ) {
-            this.triggerWatcher(key);
-          }
-        });
-        this.$refs.form.clearValidate();
-      });
-    },
-    // 更新数据
-    updateFormData(data, parentPath = "") {
-      Object.keys(data).forEach((key) => {
-        const path = parentPath ? `${parentPath}.${key}` : key;
-        if (hasPropByPath(this.formData, path)) {
-          if (isObject(data[key])) {
-            this.updateFormData(data[key], path);
-          } else {
-            this.updateValue(path, data[key]);
-          }
-        }
-      });
-    },
-    updateValue(key, value) {
-      if (typeof value === "string") {
-        value = value.trim();
-      }
-      // 更新数据
-      this.setPropByPath(this.formData, key, value);
-      this.$nextTick(() => {
-        this.triggerWatcher(key);
-      });
-    },
-    updateFieldProp(key, options) {
-      this.$set(this.updateField, key, options);
-    },
-    // 更新
-    foldBlock(block) {
-      const index = this.foldBlockList.findIndex((id) => id === block.id);
-      if (index > -1) {
-        this.foldBlockList.splice(index, 1);
-      } else {
-        this.foldBlockList.push(block.id);
-      }
-    },
-    foldAllBlock() {
-      if (this.foldBlockList.length === 0) {
-        this.foldBlockList = this.allFields.map(({ id }) => id);
-      } else {
-        this.foldBlockList = [];
-      }
-    },
-    // 浏览模式切换
-    changeScanType() {
-      if (this.scanType === "normal") {
-        this.$emit("update:scanType", "single");
-      } else {
-        this.$emit("update:scanType", "normal");
-      }
-    },
-    // 获取表单数据
-    getData() {
-      return clonedeep(this.formData);
-    },
-    // 校验表单数据
-    validate() {
-      return this.$refs.form.validate().then((valid) => {
-        if (valid) {
-          return Promise.all(
-            this.childFormRefs.map((childForm) => {
-              return childForm.validateAllForm();
-            })
-          ).then((res) => {
-            return res.every((item) => item);
-          });
-        }
-        return valid;
-      });
-    },
+    // genFormDataBySchema() {
+    //   // 根据schema初始化formData
+    // },
+    // getPropByPath,
+    // setPropByPath(obj, path, value) {
+    //   // 处理路径
+    //   path = path.replace(/\[(\w+)\]/g, ".$1");
+    //   path = path.replace(/^\./, "");
+    //   let tempObj = obj;
+    //   const paths = path.split(".");
+    //   const key = paths.pop();
+    //   for (let i = 0; i < paths.length; i++) {
+    //     if (tempObj[paths[i]] === undefined) {
+    //       this.$set(tempObj, paths[i], {});
+    //     }
+    //     tempObj = tempObj[paths[i]];
+    //   }
+    //   this.$set(tempObj, key, value);
+    // },
+    // triggerWatcher(key) {
+    //   const watcherItem = this.watcher[key];
+    //   if (watcherItem) {
+    //     (isFunction(watcherItem) ? watcherItem : watcherItem.handler)(
+    //       getPropByPath(this.formData, key),
+    //       this.formData,
+    //       (key, options) => {
+    //         this.$set(this.updateField, key, options);
+    //       }
+    //     );
+    //   }
+    // },
+    // // 根据fields和data的值，初始化 formData 的值
+    // initFormData(data = {}) {
+    //   this.$set(this, "formData", {});
+    //   // 通过fields初始化formData的key
+    //   this.allFields.forEach((fields) => {
+    //     if (fields.children && Array.isArray(fields.children)) {
+    //       fields.children.forEach((field) => {
+    //         // 如果key已经在data中，就取data中的值
+    //         if (field.key) {
+    //           this.setPropByPath(
+    //             this.formData,
+    //             field.key,
+    //             getPropByPath(data, field.key, field.defaultValue)
+    //           );
+    //         }
+    //       });
+    //     }
+    //   });
+    //   this.$nextTick(() => {
+    //     // 执行所有watcher,存在$不执行,只有immmediate为true执行
+    //     Object.keys(this.watcher).forEach((key) => {
+    //       if (
+    //         !/\$/.test(key) &&
+    //         isObject(this.watcher[key]) &&
+    //         this.watcher[key].immediate
+    //       ) {
+    //         this.triggerWatcher(key);
+    //       }
+    //     });
+    //     this.$refs.form.clearValidate();
+    //   });
+    // },
+    // // 更新数据
+    // updateFormData(data, parentPath = "") {
+    //   Object.keys(data).forEach((key) => {
+    //     const path = parentPath ? `${parentPath}.${key}` : key;
+    //     if (hasPropByPath(this.formData, path)) {
+    //       if (isObject(data[key])) {
+    //         this.updateFormData(data[key], path);
+    //       } else {
+    //         this.updateValue(path, data[key]);
+    //       }
+    //     }
+    //   });
+    // },
+    // updateValue(key, value) {
+    //   if (typeof value === "string") {
+    //     value = value.trim();
+    //   }
+    //   // 更新数据
+    //   this.setPropByPath(this.formData, key, value);
+    //   this.$nextTick(() => {
+    //     this.triggerWatcher(key);
+    //   });
+    // },
+    // updateFieldProp(key, options) {
+    //   this.$set(this.updateField, key, options);
+    // },
+    // // 更新
+    // foldBlock(block) {
+    //   const index = this.foldBlockList.findIndex((id) => id === block.id);
+    //   if (index > -1) {
+    //     this.foldBlockList.splice(index, 1);
+    //   } else {
+    //     this.foldBlockList.push(block.id);
+    //   }
+    // },
+    // foldAllBlock() {
+    //   if (this.foldBlockList.length === 0) {
+    //     this.foldBlockList = this.allFields.map(({ id }) => id);
+    //   } else {
+    //     this.foldBlockList = [];
+    //   }
+    // },
+    // // 浏览模式切换
+    // changeScanType() {
+    //   if (this.scanType === "normal") {
+    //     this.$emit("update:scanType", "single");
+    //   } else {
+    //     this.$emit("update:scanType", "normal");
+    //   }
+    // },
+    // // 获取表单数据
+    // getData() {
+    //   return clonedeep(this.formData);
+    // },
+    // // 校验表单数据
+    // validate() {
+    //   return this.$refs.form.validate().then((valid) => {
+    //     if (valid) {
+    //       return Promise.all(
+    //         this.childFormRefs.map((childForm) => {
+    //           return childForm.validateAllForm();
+    //         })
+    //       ).then((res) => {
+    //         return res.every((item) => item);
+    //       });
+    //     }
+    //     return valid;
+    //   });
+    // },
   },
   created() {
-    this.initFormData();
-    this.$watch("fields", () => {
-      this.initFormData();
-    });
-    this.$watch("data", () => {
-      this.initFormData();
-    });
+    // this.initFormData();
+    // this.$watch("fields", () => {
+    //   this.initFormData();
+    // });
+    // this.$watch("data", () => {
+    //   this.initFormData();
+    // });
   },
 };
 </script>
