@@ -120,6 +120,12 @@ export default {
         return {};
       },
     },
+    watch: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
     // 表单模式
     scanType: {
       type: String,
@@ -221,6 +227,27 @@ export default {
       },
       immediate: true,
     },
+    watch: {
+      handler(val) {
+        Object.keys(val).forEach((key) => {
+          const path = key.replace("#", "");
+          if (typeof val[key] === "function") {
+            this.$watch(
+              () => (path ? get(this.formData, path) : this.formData),
+              val[key]
+            );
+            return;
+          }
+          const { handler, ...options } = val[key];
+          this.$watch(
+            () => (path ? get(this.formData, path) : this.formData),
+            handler,
+            options
+          );
+        });
+      },
+      immediate: true,
+    },
   },
   computed: {
     fieldSpan() {
@@ -279,6 +306,9 @@ export default {
       // this.genFormDataBySchema(schema, mode);
       this.flattenSchema = flattenSchema(schema);
       this.formData = createDataSkeleton(schema, this.formData);
+    },
+    getValues() {
+      return this.formData;
     },
     getValueByPath(path) {
       return get(this.formData, path);

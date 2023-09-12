@@ -50,6 +50,12 @@ export default {
       };
     },
   },
+  beforeMount() {
+    console.log("checkbox-group beforeMount");
+  },
+  beforeUpdate() {
+    console.log("checkbox-group beforeUpdate");
+  },
   methods: {
     getProps(data) {
       //eslint-disable-next-line

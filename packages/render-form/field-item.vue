@@ -1,5 +1,6 @@
 <script>
 import { getWidgetName, getWidget } from "../../core/getWidgetName";
+import { parseAllExpression } from "../../core/expression";
 // import { getSchemaFromFlatten } from "../../core/flattenSchema";
 import getProps from "../../core/getProps";
 export default {
@@ -16,16 +17,25 @@ export default {
     const widgetName = getWidgetName(schema);
     const widget = getWidget(widgetName, root.widgets);
 
+    const value = root.getValueByPath(path);
+
+    const newSchema = parseAllExpression(
+      schema,
+      root.getValues(),
+      path,
+      root.schema
+    );
+
     return h(widget, {
       props: {
-        placeholder: getWidgetName(schema),
-        value: root.getValueByPath(path),
-        ...getProps(schema),
-        schema,
+        placeholder: getWidgetName(newSchema),
+        value,
+        ...getProps(newSchema),
+        schema: newSchema,
       },
       attrs: {
-        placeholder: getWidgetName(schema),
-        ...getProps(schema),
+        placeholder: getWidgetName(newSchema),
+        ...getProps(newSchema),
       },
       on: {
         input(e) {

@@ -106,5 +106,13 @@ Title
 
 组件的展示影响到Wrapper，如标题、肯定是独占一行的；
 在设置schema时，配置属性，不被Field包裹：no-field
+## 布局
 
 构建基于flex的布局
+
+## 表单联动
+
+{{ }} 函数表达式，实现简单联动
+watch watch 监听，实现复杂联动
+dependencies 依赖字段设置，当依赖项数据发生变化时，触发更新
+  dependencies 的核心场景是 被动触发校验

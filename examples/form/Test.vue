@@ -19,6 +19,7 @@
         Card,
         SimpleList,
       }"
+      :watch="watch"
     >
       <template #submit>
         <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -39,6 +40,17 @@ import SimpleList from "../../widgets/simpleList";
 export default {
   data() {
     return {
+      watch: {
+        "obj.input1": (val, oldVal) => {
+          console.log(val, oldVal);
+        },
+        "#": {
+          handler(val, oldVal) {
+            console.log(val, oldVal);
+          },
+          deep: true,
+        },
+      },
       Input,
       Html,
       NumberInput,
@@ -189,7 +201,8 @@ export default {
           checkbox1: {
             title: "是否选择",
             type: "boolean",
-            widget: "checkbox-group",
+            widget: "Switch",
+            disabled: "{{ formData.switch1 === true }}",
           },
           slider1: {
             title: "带滑动条",
