@@ -32,6 +32,9 @@ dependencies:
   vue-router:
     specifier: ^3.2.0
     version: 3.5.3(vue@2.6.14)
+  vuedraggable:
+    specifier: ^2.24.3
+    version: 2.24.3
 
 devDependencies:
   '@vue/cli-plugin-babel':
@@ -2921,6 +2924,7 @@ packages:
 
   /bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
+    requiresBuild: true
     dependencies:
       file-uri-to-path: 1.0.0
     dev: true
@@ -5442,6 +5446,7 @@ packages:
 
   /file-uri-to-path@1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -7099,6 +7104,7 @@ packages:
   /loader-utils@2.0.2:
     resolution: {integrity: sha512-TM57VeHptv569d/GKh6TAYdzKblwDNiumOdkFnejjD0XwTH87K90w3O7AiJRqdQoXygvi1VQTJTLGhJl7WqA7A==}
     engines: {node: '>=8.9.0'}
+    requiresBuild: true
     dependencies:
       big.js: 5.2.2
       emojis-list: 3.0.0
@@ -7595,6 +7601,7 @@ packages:
 
   /nan@2.15.0:
     resolution: {integrity: sha512-8ZtvEnA2c5aYCZYd1cvgdnU6cqwixRoYg70xPLWUws5ORTa/lnw+u4amixRS/Ac5U5mQVgp9pnlSUnbNWFaWZQ==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -9604,6 +9611,10 @@ packages:
       is-plain-obj: 1.1.0
     dev: true
 
+  /sortablejs@1.10.2:
+    resolution: {integrity: sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==}
+    dev: false
+
   /source-list-map@2.0.1:
     resolution: {integrity: sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==}
     dev: true
@@ -10836,6 +10847,12 @@ packages:
 
   /vue@2.6.14:
     resolution: {integrity: sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==}
+
+  /vuedraggable@2.24.3:
+    resolution: {integrity: sha512-6/HDXi92GzB+Hcs9fC6PAAozK1RLt1ewPTLjK0anTYguXLAeySDmcnqE8IC0xa7shvSzRjQXq3/+dsZ7ETGF3g==}
+    dependencies:
+      sortablejs: 1.10.2
+    dev: false
 
   /vuepress-html-webpack-plugin@3.2.0(webpack@4.46.0):
     resolution: {integrity: sha512-BebAEl1BmWlro3+VyDhIOCY6Gef2MCBllEVAP3NUAtMguiyOwo/dClbwJ167WYmcxHJKLl7b0Chr9H7fpn1d0A==}

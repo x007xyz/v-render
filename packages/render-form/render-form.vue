@@ -22,12 +22,14 @@
       :label-width="labelWidth || rootSchema.labelWidth"
       :label-position="labelPosition || rootSchema.labelPosition"
     >
-      <Field
-        v-for="(property, key) in rootSchema.properties"
-        :key="key"
-        :path="key"
-        :schema="property"
-      ></Field>
+      <draggable :list="rootSchema.properties" :group="{ name: 'g1' }">
+        <Field
+          v-for="item in rootSchema.properties"
+          :key="item.key"
+          :path="item.key"
+          :schema="item"
+        ></Field>
+      </draggable>
       <!-- <Field
         v-for="(property, key) in rootSchema.properties"
         :key="key"
@@ -90,11 +92,14 @@ import Field from "./render-field";
 
 import { createDataSkeleton } from "../../core/genData4Schema";
 import { flattenSchema } from "../../core/flattenSchema";
+import translateSchema from "../../core/translateSchema";
+import draggable from "vuedraggable";
 
 export default {
   name: "render-form",
   components: {
     Field,
+    draggable,
   },
   provide() {
     return {
@@ -300,12 +305,15 @@ export default {
   },
   methods: {
     setSchema(schema) {
-      // 对schema进行处理，补全默认值
-      this.rootSchema = schema;
+      console.log(
+        "🚀 ~ file: render-form.vue:308 ~ setSchema ~ schema:",
+        translateSchema(schema)
+      );
+      this.rootSchema = translateSchema(schema);
       // 根据schema初始化formData，mode为update时，更新formData，否则重置formData
       // this.genFormDataBySchema(schema, mode);
       this.flattenSchema = flattenSchema(schema);
-      this.formData = createDataSkeleton(schema, this.formData);
+      this.formData = createDataSkeleton(this.rootSchema, this.formData);
     },
     getValues() {
       return this.formData;

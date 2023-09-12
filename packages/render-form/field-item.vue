@@ -23,7 +23,7 @@ export default {
       schema,
       root.getValues(),
       path,
-      root.schema
+      root.rootSchema
     );
 
     return h(widget, {

@@ -116,3 +116,17 @@ Title
 watch watch 监听，实现复杂联动
 dependencies 依赖字段设置，当依赖项数据发生变化时，触发更新
   dependencies 的核心场景是 被动触发校验
+
+
+# TODO
+
+-[] 构建基于flex的布局，并且丰富布局属性
+-[] 表单功能，数据校验等
+-[] 表单联动，实现dependencies
+-[] 组件扩展
+-[] 可视化编辑
+  -[] 拖拽：如果使用vuedraggable需要将数据修改为数组（原本也希望是数组）
+    - [Y] 将schema转换为数组；兼容schema为对象的情况
+    - [Y] 初步使用vuedraggable实现拖拽
+  -[] 使用https://github.com/cameronhimself/vue-drag-drop自定义实现
+-[] 对接swagger生成工具，直接根据接口生成

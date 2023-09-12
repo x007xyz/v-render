@@ -9,11 +9,11 @@ export const createDataSkeleton = (schema, formData) => {
       _formData = {};
       result = {};
     }
-    Object.keys(schema.properties).forEach((key) => {
-      const childSchema = schema.properties[key];
-      const childData = _formData[key];
+    schema.properties.forEach((item) => {
+      const childSchema = item;
+      const childData = _formData[item.key];
       const childResult = createDataSkeleton(childSchema, childData);
-      result[key] = childResult;
+      result[item.key] = childResult;
     });
   } else if (_formData !== undefined) {
     // result = _formData;

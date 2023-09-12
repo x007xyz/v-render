@@ -1,4 +1,5 @@
 <script>
+import draggable from "vuedraggable";
 import RenderField from "./render-field.vue";
 import { createDataSkeleton } from "../../core/genData4Schema";
 import { getWidgetName, getWidget } from "../../core/getWidgetName";
@@ -55,16 +56,23 @@ export default {
       },
       scopedSlots: {
         default: (props) => {
-          return Object.entries(schema.items.properties).map(([key, value]) => {
-            return h(RenderField, {
-              props: {
-                path: [path + `[${props.index}]`, key]
-                  .filter(Boolean)
-                  .join("."),
-                schema: value,
-              },
-            });
-          });
+          return h(
+            draggable,
+            {
+              props: { list: schema.items.properties },
+              attrs: { group: { name: "g1" } },
+            },
+            schema.items.properties.map(({ key, ...value }) => {
+              return h(RenderField, {
+                props: {
+                  path: [path + `[${props.index}]`, key]
+                    .filter(Boolean)
+                    .join("."),
+                  schema: value,
+                },
+              });
+            })
+          );
         },
       },
     });

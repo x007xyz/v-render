@@ -1,4 +1,5 @@
 <script>
+import draggable from "vuedraggable";
 import RenderField from "./render-field.vue";
 import { getWidgetName, getWidget } from "../../core/getWidgetName";
 export default {
@@ -11,21 +12,27 @@ export default {
   inject: ["root"],
   render(h, context) {
     const { path, schema } = context.props;
+    console.log("🚀 ~ file: field-object.vue:15 ~ render ~ schema:", schema);
     const root = context.injections.root;
     const widgetName = getWidgetName(schema);
     const widget = getWidget(widgetName, root.widgets);
-    return h(
-      widget,
-      { props: schema },
-      Object.entries(schema.properties).map(([key, value]) => {
-        return h(RenderField, {
-          props: {
-            path: [path, key].filter(Boolean).join("."),
-            schema: value,
-          },
-        });
-      })
-    );
+    return h(widget, { props: schema }, [
+      h(
+        draggable,
+        {
+          props: { list: schema.properties },
+          attrs: { group: { name: "g1" } },
+        },
+        schema.properties.map(({ key, ...value }) => {
+          return h(RenderField, {
+            props: {
+              path: [path, key].filter(Boolean).join("."),
+              schema: value,
+            },
+          });
+        })
+      ),
+    ]);
   },
 };
 </script>
