@@ -58,6 +58,53 @@ Root>Wrapper
   RenderField
     FieldItem>Wrapper>Widget
     FieldObject>Wrapper
-      FieldItem>Wrapper>Widget
+      RenderField
     FieldList>Wrapper
-      FieldItem>Wrapper>Widget
+      RenderField
+
+[] FieldItem的Widget支持
+[] FieldObject/FieldList的Widget支持
+
+[] 表单布局
+
+需要将Col>Field抽象为Wrapper组件
+
+Field应该放到FieldItem中，还是RenderField
+FieldObject是否需要嵌套Field
+
+## 待实现组件
+
+### 基础组件
+输入框
+数字输入框
+文本域
+计数器
+单选
+多选
+下拉（单选）
+下拉（多选）
+日期选择
+日期范围
+时间选择
+时间范围
+开关
+图片展示
+颜色选择
+链接
+
+Html
+Title
+### 对象组件
+
+### 列表组件
+
+### 扩展组件
+金额输入框
+图片上传（拖拽上传、改变顺序、更好的支持oss）
+
+
+
+组件的展示影响到Wrapper，如标题、肯定是独占一行的；
+在设置schema时，配置属性，不被Field包裹：no-field
+
+构建基于flex的布局

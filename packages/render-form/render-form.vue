@@ -19,8 +19,8 @@
       ref="form"
       :model="formData"
       :hide-required-asterisk="textModel"
-      :label-width="labelWidth"
-      :label-position="labelPosition"
+      :label-width="labelWidth || rootSchema.labelWidth"
+      :label-position="labelPosition || rootSchema.labelPosition"
     >
       <Field
         v-for="(property, key) in rootSchema.properties"
@@ -28,6 +28,12 @@
         :path="key"
         :schema="property"
       ></Field>
+      <!-- <Field
+        v-for="(property, key) in rootSchema.properties"
+        :key="key"
+        :path="key"
+        :schema="property"
+      ></Field> -->
       <!-- 区块级，每个 filed 是一个区块 -->
       <!-- <div v-for="block in allFields" :key="block.label">
         <div
@@ -83,6 +89,7 @@ import { get, set } from "lodash-es";
 import Field from "./render-field";
 
 import { createDataSkeleton } from "../../core/genData4Schema";
+import { flattenSchema } from "../../core/flattenSchema";
 
 export default {
   name: "render-form",
@@ -95,6 +102,12 @@ export default {
     };
   },
   props: {
+    widgets: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
     path: {
       type: String,
       default: "",
@@ -187,6 +200,7 @@ export default {
       updateField: {},
       formData: {},
       rootSchema: {},
+      flattenSchema: {},
     };
   },
   watch: {
@@ -209,6 +223,12 @@ export default {
     },
   },
   computed: {
+    fieldSpan() {
+      return 24 / (this.rootSchema.column || 1);
+    },
+    fieldMaxWidth() {
+      return this.rootSchema.maxWidth || "80%";
+    },
     // 子表单监听方法
     // watcherChildFormObj() {
     //   const res = {};
@@ -257,6 +277,7 @@ export default {
       this.rootSchema = schema;
       // 根据schema初始化formData，mode为update时，更新formData，否则重置formData
       // this.genFormDataBySchema(schema, mode);
+      this.flattenSchema = flattenSchema(schema);
       this.formData = createDataSkeleton(schema, this.formData);
     },
     getValueByPath(path) {

@@ -1,6 +1,7 @@
 <script>
-import { getWidgetName } from "../../core/getWidgetName";
-import { getFieldProps } from "../../core/getProps";
+import { getWidgetName, getWidget } from "../../core/getWidgetName";
+// import { getSchemaFromFlatten } from "../../core/flattenSchema";
+import getProps from "../../core/getProps";
 export default {
   name: "field-item",
   functional: true,
@@ -11,36 +12,27 @@ export default {
   inject: ["root"],
   render(h, context) {
     const { schema, path } = context.props;
-    console.log(
-      "🚀 ~ file: field-item.vue:11 ~ context:",
-      schema,
-      path,
-      getWidgetName(schema)
-    );
     const root = context.injections.root;
-    return h(
-      "el-form-item",
-      {
-        props: getFieldProps(schema, path),
-        key: path,
+    const widgetName = getWidgetName(schema);
+    const widget = getWidget(widgetName, root.widgets);
+
+    return h(widget, {
+      props: {
+        placeholder: getWidgetName(schema),
+        value: root.getValueByPath(path),
+        ...getProps(schema),
+        schema,
       },
-      [
-        h("el-input", {
-          props: {
-            placeholder: getWidgetName(schema),
-            value: root.getValueByPath(path),
-          },
-          attrs: {
-            placeholder: getWidgetName(schema),
-          },
-          on: {
-            input(e) {
-              root.setValueByPath(e, path);
-            },
-          },
-        }),
-      ]
-    );
+      attrs: {
+        placeholder: getWidgetName(schema),
+        ...getProps(schema),
+      },
+      on: {
+        input(e) {
+          root.setValueByPath(e, path);
+        },
+      },
+    });
   },
 };
 </script>

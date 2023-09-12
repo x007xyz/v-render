@@ -21,6 +21,8 @@ export const createDataSkeleton = (schema, formData) => {
     result = _cloneDeep(schema.default);
   } else if (isListType(schema)) {
     result = [createDataSkeleton(schema.items)];
+  } else if (schema.type === "array") {
+    result = [];
   } else if (schema.type === "boolean" && !schema.widget) {
     // result = false;
     result = undefined;

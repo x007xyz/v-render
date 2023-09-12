@@ -1,5 +1,6 @@
 <script>
 import RenderField from "./render-field.vue";
+import { getWidgetName, getWidget } from "../../core/getWidgetName";
 export default {
   name: "field-object",
   functional: true,
@@ -10,10 +11,12 @@ export default {
   inject: ["root"],
   render(h, context) {
     const { path, schema } = context.props;
-    console.log("🚀 ~ file: field-object.vue:11 ~ context:", path, schema);
+    const root = context.injections.root;
+    const widgetName = getWidgetName(schema);
+    const widget = getWidget(widgetName, root.widgets);
     return h(
-      "div",
-      { class: "box" },
+      widget,
+      { props: schema },
       Object.entries(schema.properties).map(([key, value]) => {
         return h(RenderField, {
           props: {
@@ -29,5 +32,7 @@ export default {
 <style lang="css">
 .box {
   border: 1px solid #ccc;
+  overflow: hidden;
+  width: 100%;
 }
 </style>

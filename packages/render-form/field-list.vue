@@ -1,6 +1,8 @@
 <script>
 import RenderField from "./render-field.vue";
 import { createDataSkeleton } from "../../core/genData4Schema";
+import { getWidgetName, getWidget } from "../../core/getWidgetName";
+import { cloneDeep } from "lodash-es";
 export default {
   name: "field-list",
   functional: true,
@@ -11,58 +13,61 @@ export default {
   inject: ["root"],
   render(h, context) {
     const { path, schema } = context.props;
-    console.log("🚀 ~ file: field-list.vue:11 ~ context:", path, schema);
     const root = context.injections.root;
+    const widgetName = getWidgetName(schema);
+    const widget = getWidget(widgetName, root.widgets);
     const values = root.getValueByPath(path);
-    console.log("🚀 ~ file: field-list.vue:17 ~ render ~ values:", values);
-    const handleNew = (event) => {
-      event.preventDefault();
+    const handleNew = () => {
       root.setValueByPath(
         values.concat([createDataSkeleton(schema.items)]),
         path
       );
     };
-    const handleRemove = (event) => {
-      event.preventDefault();
-      root.setValueByPath(values.slice(0, -1), path);
+    const handleRemove = (index) => {
+      const _value = values.slice();
+      _value.splice(index, 1);
+      root.setValueByPath(_value, path);
     };
-    return h(
-      "div",
-      { class: "box", key: path },
-      values
-        .reduce((r, _, index) => {
-          return r.concat(
-            Object.entries(schema.items.properties).map(([key, value]) => {
-              return h(RenderField, {
-                props: {
-                  path: [path + `[${index}]`, key].filter(Boolean).join("."),
-                  schema: value,
-                },
-              });
-            })
-          );
-        }, [])
-        .concat([
-          h(
-            "button",
-            {
-              on: {
-                click: handleNew,
+
+    const handleMove = ({ index, step }) => {
+      const nextIndex = index + step;
+      const _values = values.slice();
+      const temp = _values[index];
+      _values[index] = _values[nextIndex];
+      _values[nextIndex] = temp;
+      root.setValueByPath(_values, path);
+    };
+
+    const handleCopy = (index) => {
+      root.setValueByPath(values.concat([cloneDeep(values[index])]), path);
+    };
+    return h(widget, {
+      key: path,
+      on: {
+        add: handleNew,
+        remove: handleRemove,
+        move: handleMove,
+        copy: handleCopy,
+      },
+      props: {
+        value: values,
+        ...schema,
+      },
+      scopedSlots: {
+        default: (props) => {
+          return Object.entries(schema.items.properties).map(([key, value]) => {
+            return h(RenderField, {
+              props: {
+                path: [path + `[${props.index}]`, key]
+                  .filter(Boolean)
+                  .join("."),
+                schema: value,
               },
-            },
-            "add"
-          ),
-          h(
-            "button",
-            {
-              on: {
-                click: handleRemove,
-              },
-            },
-            "remove"
-          ),
-        ])
-    );
+            });
+          });
+        },
+      },
+    });
   },
 };
 </script>
