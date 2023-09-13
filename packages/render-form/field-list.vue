@@ -1,5 +1,5 @@
 <script>
-import draggable from "vuedraggable";
+import VRow from "./v-row.vue";
 import RenderField from "./render-field.vue";
 import { createDataSkeleton } from "../../core/genData4Schema";
 import { getWidgetName, getWidget } from "../../core/getWidgetName";
@@ -57,10 +57,9 @@ export default {
       scopedSlots: {
         default: (props) => {
           return h(
-            draggable,
+            VRow,
             {
-              props: { list: schema.items.properties },
-              attrs: { group: { name: "g1" } },
+              props: { list: schema.items.properties, group: { name: "g1" } },
             },
             schema.items.properties.map(({ key, ...value }) => {
               return h(RenderField, {

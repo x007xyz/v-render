@@ -22,14 +22,14 @@
       :label-width="labelWidth || rootSchema.labelWidth"
       :label-position="labelPosition || rootSchema.labelPosition"
     >
-      <draggable :list="rootSchema.properties" :group="{ name: 'g1' }">
+      <VRow :list="rootSchema.properties" :group="{ name: 'g1' }">
         <Field
           v-for="item in rootSchema.properties"
           :key="item.key"
           :path="item.key"
           :schema="item"
         ></Field>
-      </draggable>
+      </VRow>
       <!-- <Field
         v-for="(property, key) in rootSchema.properties"
         :key="key"
@@ -93,13 +93,13 @@ import Field from "./render-field";
 import { createDataSkeleton } from "../../core/genData4Schema";
 import { flattenSchema } from "../../core/flattenSchema";
 import translateSchema from "../../core/translateSchema";
-import draggable from "vuedraggable";
+import VRow from "./v-row.vue";
 
 export default {
   name: "render-form",
   components: {
     Field,
-    draggable,
+    VRow,
   },
   provide() {
     return {

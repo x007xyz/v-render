@@ -1,5 +1,5 @@
 <script>
-import draggable from "vuedraggable";
+import VRow from "./v-row.vue";
 import RenderField from "./render-field.vue";
 import { getWidgetName, getWidget } from "../../core/getWidgetName";
 export default {
@@ -18,10 +18,9 @@ export default {
     const widget = getWidget(widgetName, root.widgets);
     return h(widget, { props: schema }, [
       h(
-        draggable,
+        VRow,
         {
-          props: { list: schema.properties },
-          attrs: { group: { name: "g1" } },
+          props: { list: schema.properties, group: { name: "g1" } },
         },
         schema.properties.map(({ key, ...value }) => {
           return h(RenderField, {
