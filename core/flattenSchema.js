@@ -30,7 +30,7 @@ export function getSchemaFromFlatten(flatten, path = "#") {
   }
 
   schema = item.schema;
-  // schema.$id && delete schema.$id;
+  schema.$id && delete schema.$id;
   if (item.children.length > 0) {
     item.children.forEach((child) => {
       if (!flatten[child]) return;

@@ -116,7 +116,7 @@ export default {
     },
     // 是否显示默认底部按钮
     footer: {
-      type: Boolean,
+      type: [Boolean, Object, Function],
       default: false,
     },
   },
@@ -135,6 +135,7 @@ export default {
       immediate: true,
     },
     watch: {
+      // TODO: 处理watch监听数组的情况
       handler(val) {
         Object.keys(val).forEach((key) => {
           const path = key.replace("#", "");

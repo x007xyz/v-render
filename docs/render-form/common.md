@@ -66,11 +66,54 @@
 <<< @/examples/base/footer04.vue
 :::
 
-我们可以通过设置表单的全局属性设置整体的表单布局，也可以通过单独为元素设置布局宽度，在特殊需求下，还支持表单元素特殊的换行设置。
-通过`formItemCol`可以设置元素的默认宽度，为元素单独设置`span`可以覆盖默认的元素宽度设置。`nextRowFirst`设置当前元素为第一个元素，`currentRowLast`设置当前元素为最后一个元素。
+
+## 表单联动
+
+表单联动是开发中常见的交互，我们提供以下几种方式来满足不同的交互场景
+
+`{{ }}`函数表达式，实现简单联动
+`watch`监听，实现复杂联动
+
+### 函数表达式
+
+函数表达式为字符串格式，并以双花括号`{{}}`为语法特征，用一种简洁的配置方式来支持联动。例如：控制表单项禁用、隐藏等交互。
+
+```json
+{
+  "disabled": "{{ formData.switch1 === true }}",
+  "hidden": "{{ rootValue.input1 }}"
+}
+```
+`formData`: 整个表单的值
+`rootValue`: 用于 List 场景使用，表示 List.Item 的值
+
+#### 示例
+
 :::demo
-<<< @/examples/form/Layout.vue
+<<< @/examples/watch/watch.vue
 :::
+
+### watch监听
+
+`watch`本质上就是使用`$watch`方法去监听`formData`数据，所以语法和`$watch`基本一致。在对引用类型做监听时，如果只是变更数据，旧值将与新值相同，因为它们的引用指向同一个地址。
+
+```js
+watch: {
+  "list.input1": (val, oldVal) => {
+    console.log(val, oldVal);
+  },
+  "#": {
+    handler(val, oldVal) {
+      console.log(val, oldVal);
+    },
+    deep: true,
+  },
+},
+```
+:::demo
+<<< @/examples/watch/watch02.vue
+:::
+
 
 ## 表单校验
 我们可以通过表单分块的功能将表单按一定规律拆分为多个模块，方便用户输入信息。

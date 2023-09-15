@@ -52,7 +52,6 @@ export const isHasExpression = (schema) => {
 
 export const parseExpression = (func, formData = {}, parentPath) => {
   const parentData = get(formData, parentPath) || {};
-
   if (typeof func === "string") {
     const funcBody = func.replace(/^{\s*{/g, "").replace(/}\s*}$/g, "");
 
@@ -129,7 +128,10 @@ export const parseAllExpression = (
 
   Object.keys(schema).forEach((key) => {
     const value = schema[key];
-
+    // 跳过子协议
+    if (key === "properties") {
+      return;
+    }
     if (isArray(value)) {
       schema[key] = recursionArray(value);
     }

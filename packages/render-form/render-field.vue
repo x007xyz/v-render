@@ -5,6 +5,8 @@ import FieldList from "./field-list.vue";
 import FieldObject from "./field-object.vue";
 import VCol from "./v-col.vue";
 
+import { parseAllExpression } from "../../core/expression";
+
 import { getFieldProps } from "../../core/getProps";
 import { getParentSchemaFromFlatten } from "../../core/flattenSchema";
 export default {
@@ -21,12 +23,24 @@ export default {
     const root = context.injections.root;
 
     const parentSchema = getParentSchemaFromFlatten(root.flattenSchema, path);
+
+    const newSchema = parseAllExpression(
+      schema,
+      root.getValues(),
+      path.split(".").slice(0, -1).join("."), // 获取父级路径，TODO：存在问题，需要优化
+      root.rootSchema
+    );
+
+    if (newSchema.hidden) {
+      return null;
+    }
+
     if (isObjType(schema)) {
       return h(
         VCol,
         {
           props: {
-            span: schema.span || parentSchema.span,
+            span: newSchema.span || parentSchema.span,
             column: parentSchema.column || root.rootSchema.column,
           },
         },
@@ -34,7 +48,7 @@ export default {
           h(FieldObject, {
             props: {
               path,
-              schema: schema,
+              schema: newSchema,
             },
           }),
         ]
@@ -44,7 +58,7 @@ export default {
       return h(FieldList, {
         props: {
           path,
-          schema: schema,
+          schema: newSchema,
         },
       });
     }
@@ -52,7 +66,7 @@ export default {
       VCol,
       {
         props: {
-          span: schema.span || parentSchema.span,
+          span: newSchema.span || parentSchema.span,
           column: parentSchema.column || root.rootSchema.column,
         },
       },
@@ -61,17 +75,17 @@ export default {
           ? h(FieldItem, {
               props: {
                 path,
-                schema: schema,
+                schema: newSchema,
               },
             })
           : h(
               "el-form-item",
               {
-                props: getFieldProps(schema, path),
+                props: getFieldProps(newSchema, path),
                 key: path,
                 style: {
                   width:
-                    schema.width ||
+                    newSchema.width ||
                     parentSchema.fieldSpan ||
                     root.fieldMaxWidth,
                 },
@@ -80,7 +94,7 @@ export default {
                 h(FieldItem, {
                   props: {
                     path,
-                    schema: schema,
+                    schema: newSchema,
                   },
                 }),
               ]

@@ -12,7 +12,6 @@ export default {
   inject: ["root"],
   render(h, context) {
     const { path, schema } = context.props;
-    console.log("🚀 ~ file: field-object.vue:15 ~ render ~ schema:", schema);
     const root = context.injections.root;
     const widgetName = getWidgetName(schema);
     const widget = getWidget(widgetName, root.widgets);
