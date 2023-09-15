@@ -21,12 +21,6 @@ export default {
     const root = context.injections.root;
 
     const parentSchema = getParentSchemaFromFlatten(root.flattenSchema, path);
-    console.log(
-      "🚀 ~ file: render-field.vue:24 ~ render ~ parentSchema:",
-      parentSchema.column,
-      root.rootSchema.column
-    );
-
     if (isObjType(schema)) {
       return h(
         VCol,

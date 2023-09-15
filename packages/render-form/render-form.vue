@@ -2,8 +2,8 @@
   <el-form
     ref="form"
     :model="formData"
-    :hide-required-asterisk="textModel"
-    :label-width="labelWidth || rootSchema.labelWidth"
+    :hide-required-asterisk="readonly"
+    :label-width="_labelWidth"
     :label-position="labelPosition || rootSchema.labelPosition"
   >
     <VRow :list="rootSchema.properties" :group="{ name: 'g1' }">
@@ -14,6 +14,23 @@
         :schema="item"
       ></Field>
     </VRow>
+    <!-- TODO: 将判断逻辑进行抽象 -->
+    <el-form-item v-if="footer || $slots.footer">
+      <template v-if="footer === true">
+        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
+      </template>
+      <template v-if="typeof footer === 'object'">
+        <el-button @click="reset">{{ footer.reset.title }}</el-button>
+        <el-button type="primary" @click="onSubmit">{{
+          footer.submit.title
+        }}</el-button>
+      </template>
+      <template v-if="typeof footer === 'function'">
+        <RenderItem :render="footer"></RenderItem>
+      </template>
+      <slot name="footer"></slot>
+    </el-form-item>
   </el-form>
 </template>
 
@@ -26,11 +43,24 @@ import { flattenSchema } from "../../core/flattenSchema";
 import translateSchema from "../../core/translateSchema";
 import VRow from "./v-row.vue";
 
+import { Input, DatePicker, TimePicker, Switch, Slider } from "element-ui";
+import Html from "../../widgets/fields/html";
+import NumberInput from "../../widgets/fields/number-input";
+import Select from "../../widgets/fields/select";
+import Radio from "../../widgets/fields/radio-group";
+import Checkbox from "../../widgets/fields/checkbox-group";
+import Title from "../../widgets/fields/title";
+import Card from "../../widgets/card";
+import SimpleList from "../../widgets/simpleList";
+import { _cloneDeep } from "../../core/utils";
+import RenderItem from "../render-item/render-item.vue";
+
 export default {
-  name: "render-form",
+  name: "RenderForm",
   components: {
     Field,
     VRow,
+    RenderItem,
   },
   provide() {
     return {
@@ -41,7 +71,21 @@ export default {
     widgets: {
       type: Object,
       default() {
-        return {};
+        return {
+          Input,
+          Html,
+          NumberInput,
+          Select,
+          Radio,
+          Checkbox,
+          DatePicker,
+          TimePicker,
+          Switch,
+          Slider,
+          Title,
+          Card,
+          SimpleList,
+        };
       },
     },
     watch: {
@@ -61,14 +105,19 @@ export default {
     },
     // 左右模式时，label 的宽度
     labelWidth: {
-      type: String,
-      default: "160px",
+      type: [String, Number],
+      default: "80px",
     },
     schema: {
       type: Object,
       default() {
         return {};
       },
+    },
+    // 是否显示默认底部按钮
+    footer: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -108,6 +157,13 @@ export default {
     },
   },
   computed: {
+    _labelWidth() {
+      const _labelWidth = this.rootSchema.labelWidth || this.labelWidth;
+      if (/^\d+$/.test(_labelWidth)) {
+        return `${_labelWidth}px`;
+      }
+      return _labelWidth;
+    },
     fieldMaxWidth() {
       return this.rootSchema.maxWidth || "80%";
     },
@@ -121,13 +177,33 @@ export default {
       this.formData = createDataSkeleton(this.rootSchema, this.formData);
     },
     getValues() {
-      return this.formData;
+      return _cloneDeep(this.formData);
+    },
+    setValues(data) {
+      Object.keys(this.flattenSchema).forEach((key) => {
+        if (key !== "#") {
+          this.setValueByPath(get(data, key), key);
+        }
+      });
     },
     getValueByPath(path) {
       return get(this.formData, path);
     },
     setValueByPath(value, path) {
       set(this.formData, path, value);
+    },
+    onSubmit() {
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.$emit("submit", this.formData);
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    reset() {
+      this.formData = createDataSkeleton(this.rootSchema);
     },
   },
   created() {},

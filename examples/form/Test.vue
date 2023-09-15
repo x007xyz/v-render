@@ -1,26 +1,6 @@
 <template>
   <div id="app">
-    <RenderForm
-      ref="form"
-      :fields="fields"
-      :schema="schema"
-      :widgets="{
-        Input,
-        Html,
-        NumberInput,
-        Select,
-        Radio,
-        Checkbox,
-        DatePicker,
-        TimePicker,
-        Switch,
-        Slider,
-        Title,
-        Card,
-        SimpleList,
-      }"
-      :watch="watch"
-    >
+    <RenderForm ref="form" :fields="fields" :schema="schema" :watch="watch">
       <template #submit>
         <el-button type="primary" @click="onSubmit">提交</el-button>
       </template>
@@ -28,15 +8,6 @@
   </div>
 </template>
 <script>
-import { Input, DatePicker, TimePicker, Switch, Slider } from "element-ui";
-import Html from "../../widgets/fields/html";
-import NumberInput from "../../widgets/fields/number-input";
-import Select from "../../widgets/fields/select";
-import Radio from "../../widgets/fields/radio-group";
-import Checkbox from "../../widgets/fields/checkbox-group";
-import Title from "../../widgets/fields/title";
-import Card from "../../widgets/card";
-import SimpleList from "../../widgets/simpleList";
 export default {
   data() {
     return {
@@ -51,19 +22,6 @@ export default {
           deep: true,
         },
       },
-      Input,
-      Html,
-      NumberInput,
-      Select,
-      Radio,
-      Checkbox,
-      DatePicker,
-      TimePicker,
-      Switch,
-      Slider,
-      Title,
-      Card,
-      SimpleList,
       schema: {
         type: "object",
         displayType: "row",

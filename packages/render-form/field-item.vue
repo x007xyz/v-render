@@ -14,7 +14,10 @@ export default {
   render(h, context) {
     const { schema, path } = context.props;
     const root = context.injections.root;
-    const widgetName = getWidgetName(schema);
+    const widgetName =
+      schema.readonly || (root.readonly && schema.readonly !== false)
+        ? "Html"
+        : getWidgetName(schema);
     const widget = getWidget(widgetName, root.widgets);
 
     const value = root.getValueByPath(path);

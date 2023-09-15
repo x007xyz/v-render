@@ -34,11 +34,8 @@ module.exports = {
       '/render-form/': [
         '',
         'common',
-        'field',
-        'watcher',
         'base-comp',
-        'advanced',
-        'customize'
+        'api'
       ]
     }
   },
