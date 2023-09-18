@@ -32,7 +32,7 @@ export default {
         properties: {
           void1: {
             title: "常用组件",
-            type: "void",
+            type: "string",
             widget: "Title",
             span: 24,
             noField: true,
