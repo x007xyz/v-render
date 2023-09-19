@@ -1,23 +1,15 @@
 <template>
   <div class="container">
-    {{ obj }}
+    <Generator></Generator>
   </div>
 </template>
 <script>
-const parseObj2Fields = (obj) => {
-  console.log(obj);
-  const fields = [];
-  Object.keys(obj).forEach((key) => {
-    if (typeof obj[key] === "object" && obj[key] !== null) {
-      console.log("object");
-    } else {
-      fields.push({ key, value: obj[key] });
-    }
-  });
-  return fields;
-};
+import Generator from "../../packages/generator";
 export default {
   name: "index",
+  components: {
+    Generator,
+  },
   data() {
     return {
       obj: {
@@ -37,9 +29,6 @@ export default {
         // },
       },
     };
-  },
-  beforeMount() {
-    console.log(parseObj2Fields(this.obj));
   },
 };
 </script>

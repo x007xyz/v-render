@@ -39,7 +39,7 @@ import { get, set } from "lodash-es";
 import Field from "./render-field";
 
 import { createDataSkeleton } from "../../core/genData4Schema";
-import { flattenSchema } from "../../core/flattenSchema";
+import { flattenSchema, getSchemaFromFlatten } from "../../core/flattenSchema";
 import translateSchema from "../../core/translateSchema";
 import VRow from "./v-row.vue";
 
@@ -205,6 +205,12 @@ export default {
     },
     reset() {
       this.formData = createDataSkeleton(this.rootSchema);
+    },
+    _emitSelectField(path) {
+      this.$emit("select-field", {
+        path,
+        schema: getSchemaFromFlatten(this.flattenSchema, path),
+      });
     },
   },
   created() {},

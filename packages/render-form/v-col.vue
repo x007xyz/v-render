@@ -1,5 +1,5 @@
 <template>
-  <div class="v-col" :class="className">
+  <div class="v-col" :class="className" @click="$emit('click')">
     <slot></slot>
   </div>
 </template>
@@ -31,6 +31,18 @@ export default {
   position: relative;
   max-width: 100%;
   min-height: 1px;
+}
+.v-col::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.v-col:hover::after {
+  border: 1px dashed #409eff;
 }
 $grid-columns: 24;
 

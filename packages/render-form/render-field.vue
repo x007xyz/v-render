@@ -69,6 +69,11 @@ export default {
           span: newSchema.span || parentSchema.span,
           column: parentSchema.column || root.rootSchema.column,
         },
+        on: {
+          click: () => {
+            root._emitSelectField(path);
+          },
+        },
       },
       [
         schema.noField
